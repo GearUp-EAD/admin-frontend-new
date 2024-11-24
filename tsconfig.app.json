@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "outDir": "./dist/out-tsc",
+    "types": []
+  },
+  "include": [
+    "src/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
+}
