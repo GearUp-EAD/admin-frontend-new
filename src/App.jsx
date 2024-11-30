@@ -11,19 +11,21 @@ import Income from './pages/Income';
 import Chat from './pages/Chat';
 import Help from './pages/Help';
 import Profile from './pages/Profile';
+import ProtectedRoutes from './context/ProtectedRoutes';
+
 
 function App() {
-  // Get auth status from localStorage
-  const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
 
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/login" element={!isAuthenticated ? <Login /> : <Navigate to="/" />} />
+        <Route path="/login" element={<Login />} />
         <Route
           path="/"
-          element={isAuthenticated ? <Layout /> : <Navigate to="/login" />}
+          element={ <Layout />}
         >
+          				<Route element={<ProtectedRoutes/>}>
+
           <Route index element={<Dashboard />} />
           <Route path="products" element={<Products />} />
           <Route path="products/create" element={<CreateProduct />} />
@@ -34,6 +36,8 @@ function App() {
           <Route path="help" element={<Help />} />
           <Route path="profile" element={<Profile />} />
         </Route>
+        </Route>	
+
       </Routes>
     </BrowserRouter>
   );
