@@ -14,13 +14,13 @@ const Layout = () => {
     <div className="flex min-h-screen bg-gray-50">
       {/* Mobile Sidebar Overlay */}
       {isMobileSidebarOpen && (
-        <div 
-          className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden" 
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
           onClick={() => setIsMobileSidebarOpen(false)}
         >
-          <div 
+          <div
             className="fixed inset-y-0 left-0 w-64 bg-white"
-            onClick={e => e.stopPropagation()}
+            onClick={(e) => e.stopPropagation()}
           >
             <Sidebar />
           </div>
@@ -37,7 +37,7 @@ const Layout = () => {
       {/* Main Content */}
       <div className="flex-1">
         <Header toggleMobileSidebar={toggleMobileSidebar} />
-        <main className="p-4 md:p-8 lg:ml-64">
+        <main className="p-4 md:p-8">
           <Outlet />
         </main>
       </div>

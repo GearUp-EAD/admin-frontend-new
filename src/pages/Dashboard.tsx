@@ -9,19 +9,19 @@ const Dashboard = () => {
   const { recentCustomers } = useCustomers();
 
   return (
-    <div>
+    <div className="p-6 bg-gray-100 min-h-screen">
       <h2 className="text-2xl font-bold mb-6">Dashboard</h2>
 
-      {/* Stats */}
+      {/* Overview Section */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-        <div className="stat-card">
+        <div className="bg-white p-4 rounded-xl shadow-sm">
           <h3 className="text-lg font-semibold mb-2">Customers</h3>
           <div className="flex items-end space-x-2">
             <span className="text-3xl font-bold">{stats.customers}</span>
             <span className="text-green-500 text-sm">↑ 8%</span>
           </div>
         </div>
-        <div className="stat-card">
+        <div className="bg-white p-4 rounded-xl shadow-sm">
           <h3 className="text-lg font-semibold mb-2">Income</h3>
           <div className="flex items-end space-x-2">
             <span className="text-3xl font-bold">${stats.income}</span>
@@ -30,7 +30,7 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Recent Customers */}
+      {/* Welcome Section */}
       <div className="mb-8">
         <h3 className="text-lg font-semibold mb-4">Welcome to our new online experience</h3>
         <div className="flex space-x-6 overflow-x-auto pb-4">
@@ -47,12 +47,12 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Popular Products Section */}
+      {/* Popular Products */}
       <div className="mb-8">
         <PopularProducts />
       </div>
 
-      {/* Revenue Chart */}
+      {/* Total Income Chart */}
       <div className="bg-white p-6 rounded-xl shadow-sm">
         <div className="flex justify-between items-center mb-6">
           <h3 className="text-lg font-semibold">Total Income</h3>

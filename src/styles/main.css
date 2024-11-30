@@ -9,8 +9,9 @@
   }
 
   .main-content {
-    @apply p-4 md:p-8 lg:ml-64;
+    @apply pl-30; /* Use padding-left instead of margin-left */
   }
+  
 
   /* Cards */
   .stat-card {
