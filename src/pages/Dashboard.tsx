@@ -1,8 +1,9 @@
 import React from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import PopularProducts from '../components/PopularProducts';
 import { useStats } from '../hooks/useStats';
 import { useCustomers } from '../hooks/useCustomers';
+import { DollarSign, TrendingUp } from 'lucide-react';
 
 const Dashboard = () => {
   const { stats, data: chartData } = useStats();
@@ -14,25 +15,33 @@ const Dashboard = () => {
 
       {/* Overview Section */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-        <div className="bg-white p-4 rounded-xl shadow-sm">
-          <h3 className="text-lg font-semibold mb-2">Customers</h3>
-          <div className="flex items-end space-x-2">
-            <span className="text-3xl font-bold">{stats.customers}</span>
-            <span className="text-green-500 text-sm">↑ 8%</span>
+        <div className="bg-white p-6 rounded-xl shadow-sm">
+          <div className="flex items-center">
+            <div className="p-3 bg-green-100 rounded-full">
+              <DollarSign className="w-6 h-6 text-green-600" />
+            </div>
+            <div className="ml-4">
+              <p className="text-sm text-gray-500">Total Income</p>
+              <p className="text-2xl font-semibold">${stats.income}</p>
+            </div>
           </div>
         </div>
-        <div className="bg-white p-4 rounded-xl shadow-sm">
-          <h3 className="text-lg font-semibold mb-2">Income</h3>
-          <div className="flex items-end space-x-2">
-            <span className="text-3xl font-bold">${stats.income}</span>
-            <span className="text-green-500 text-sm">↑ 8%</span>
+        <div className="bg-white p-6 rounded-xl shadow-sm">
+          <div className="flex items-center">
+            <div className="p-3 bg-blue-100 rounded-full">
+              <TrendingUp className="w-6 h-6 text-blue-600" />
+            </div>
+            <div className="ml-4">
+              <p className="text-sm text-gray-500">Monthly Growth</p>
+              <p className="text-2xl font-semibold">+8.5%</p>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Welcome Section */}
       <div className="mb-8">
-        <h3 className="text-lg font-semibold mb-4">Welcome to our new online experience</h3>
+        <h3 className="text-lg font-semibold mb-4">Our New Customers</h3>
         <div className="flex space-x-6 overflow-x-auto pb-4">
           {recentCustomers.map((customer) => (
             <div key={customer.name} className="text-center flex-shrink-0">
@@ -49,7 +58,12 @@ const Dashboard = () => {
 
       {/* Popular Products */}
       <div className="mb-8">
-        <PopularProducts />
+        <div className="bg-white p-6 rounded-xl shadow-sm">
+          <h3 className="text-lg font-semibold mb-4">Popular Products</h3>
+          <div className="space-y-4">
+            <PopularProducts />
+          </div>
+        </div>
       </div>
 
       {/* Total Income Chart */}
@@ -62,20 +76,22 @@ const Dashboard = () => {
             <option>Last Week</option>
           </select>
         </div>
-        <div className="h-[300px] w-full">
-          <LineChart width={800} height={300} data={chartData}>
-            <CartesianGrid strokeDasharray="3 3" vertical={false} />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
-            <Line
-              type="monotone"
-              dataKey="value"
-              stroke="#8B4513"
-              strokeWidth={2}
-              dot={{ fill: '#8B4513' }}
-            />
-          </LineChart>
+        <div className="h-80">
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={chartData}>
+              <CartesianGrid strokeDasharray="3 3" vertical={false} />
+              <XAxis dataKey="name" />
+              <YAxis />
+              <Tooltip />
+              <Line
+                type="monotone"
+                dataKey="value"
+                stroke="#8B4513"
+                strokeWidth={2}
+                dot={{ fill: '#8B4513' }}
+              />
+            </LineChart>
+          </ResponsiveContainer>
         </div>
       </div>
     </div>

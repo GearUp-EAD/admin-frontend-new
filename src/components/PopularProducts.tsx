@@ -57,29 +57,29 @@ const PopularProducts = () => {
         </select>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="space-y-4">
         {popularProducts.map((product) => (
-          <div key={product.id} className="product-card">
-            <img
-              src={product.image}
-              alt={product.name}
-              className="product-image"
-            />
-            <div className="product-details">
-              <span className="text-xs font-medium text-gray-500 uppercase">
-                {product.category}
-              </span>
-              <h4 className="product-title">{product.name}</h4>
-              <p className="product-price">${product.price}</p>
-              <div className="product-stats">
-                <div className="flex items-center">
-                  <ShoppingBag className="w-4 h-4 mr-1" />
-                  <span>{product.sales} sales</span>
-                </div>
-                <div className="flex items-center text-green-600">
-                  <TrendingUp className="w-4 h-4 mr-1" />
-                  <span>+12%</span>
-                </div>
+          <div key={product.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+            <div className="flex items-center">
+              <img
+                src={product.image}
+                alt={product.name}
+                className="w-16 h-16 rounded-full"
+              />
+              <div className="ml-4">
+                <p className="text-sm font-medium text-gray-900">{product.name}</p>
+                <p className="text-xs text-gray-500">{product.category}</p>
+              </div>
+            </div>
+            <div className="text-right">
+              <p className="text-sm font-medium text-gray-900">${product.price}</p>
+              <div className="flex items-center mt-1">
+                <ShoppingBag className="w-4 h-4 mr-1" />
+                <span>{product.sales} sales</span>
+              </div>
+              <div className="flex items-center text-green-600 mt-1">
+                <TrendingUp className="w-4 h-4 mr-1" />
+                <span>+12%</span>
               </div>
             </div>
           </div>
