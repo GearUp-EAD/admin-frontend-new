@@ -1,8 +1,11 @@
+import React, { useContext } from 'react';
 import { Outlet, Navigate } from 'react-router-dom';
+import { AuthContext } from '../KeycloakProvider';
 
 const ProtectedRoutes = () => {
-    const user = true; // Simulate an unauthenticated user
-    return user ? <Outlet /> : <Navigate to="/login"/>; // Redirect to login if not authenticated
+  const { isAuthenticated } = useContext(AuthContext);
+
+  return isAuthenticated ? <Outlet /> : <Navigate to="/login" />;
 };
 
 export default ProtectedRoutes;

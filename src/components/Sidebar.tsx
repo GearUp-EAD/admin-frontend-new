@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { Home, Package, Users, ShoppingCart, DollarSign, MessageCircle, HelpCircle, LogOut } from 'lucide-react';
+import { useKeycloak } from '@react-keycloak/web';
 
 const navItems = [
   { icon: <Home className="w-5 h-5 mr-3" />, label: 'Home', path: '/' },
@@ -12,6 +13,13 @@ const navItems = [
 ];
 
 const Sidebar = () => {
+
+  
+  const handleLogout = () => {
+   
+  };
+
+  
   return (
     <div className="h-full bg-white border-r border-gray-200 p-6">
       <div className="mb-8">
@@ -51,7 +59,10 @@ const Sidebar = () => {
           <HelpCircle className="w-5 h-5 mr-3" />
           Help
         </NavLink>
-        <button className="flex items-center px-4 py-3 text-gray-600 hover:bg-gray-100 rounded-lg w-full transition-colors">
+        <button
+           onClick={handleLogout}  // Logout when the button is clicked
+          className="flex items-center px-4 py-3 text-gray-600 hover:bg-gray-100 rounded-lg w-full transition-colors"
+        >
           <LogOut className="w-5 h-5 mr-3" />
           Logout
         </button>
