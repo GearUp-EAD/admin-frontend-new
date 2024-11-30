@@ -4,17 +4,17 @@ import { Mail, Phone, MessageCircle, FileText, Book, Video } from 'lucide-react'
 const Help = () => {
   const helpCategories = [
     {
-      icon: <Book className="w-8 h-8 text-[#8B4513]" />,
+      icon: <Book className="w-8 h-8 text-[#543310]" />,
       title: 'Documentation',
       description: 'Read our detailed guides and documentation',
     },
     {
-      icon: <Video className="w-8 h-8 text-[#8B4513]" />,
+      icon: <Video className="w-8 h-8 text-[#543310]" />,
       title: 'Video Tutorials',
       description: 'Watch step-by-step video tutorials',
     },
     {
-      icon: <FileText className="w-8 h-8 text-[#8B4513]" />,
+      icon: <FileText className="w-8 h-8 text-[#543310]" />,
       title: 'FAQs',
       description: 'Find answers to common questions',
     },
@@ -68,21 +68,21 @@ const Help = () => {
         <h3 className="text-xl font-semibold mb-6">Contact Support</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="flex items-center space-x-4">
-            <Mail className="w-6 h-6 text-[#8B4513]" />
+            <Mail className="w-6 h-6 text-[#543310]" />
             <div>
               <p className="font-medium">Email Support</p>
               <p className="text-sm text-gray-600">support@elitegear.com</p>
             </div>
           </div>
           <div className="flex items-center space-x-4">
-            <Phone className="w-6 h-6 text-[#8B4513]" />
+            <Phone className="w-6 h-6 text-[#543310]" />
             <div>
               <p className="font-medium">Phone Support</p>
               <p className="text-sm text-gray-600">+1 (555) 123-4567</p>
             </div>
           </div>
           <div className="flex items-center space-x-4">
-            <MessageCircle className="w-6 h-6 text-[#8B4513]" />
+            <MessageCircle className="w-6 h-6 text-[#543310]" />
             <div>
               <p className="font-medium">Live Chat</p>
               <p className="text-sm text-gray-600">Available 24/7</p>

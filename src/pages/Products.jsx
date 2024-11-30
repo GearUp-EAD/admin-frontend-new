@@ -84,7 +84,7 @@ const Products = () => {
       `,
       showCancelButton: true,
       confirmButtonText: 'Save',
-      confirmButtonColor: '#8B4513',
+      confirmButtonColor: '#543310',
       cancelButtonColor: '#6B7280',
       preConfirm: () => {
         return {
@@ -118,7 +118,7 @@ const Products = () => {
       text: "You won't be able to revert this!",
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#8B4513',
+      confirmButtonColor: '#543310',
       cancelButtonColor: '#6B7280',
       confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
@@ -141,12 +141,6 @@ const Products = () => {
     <div>
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold">Products</h2>
-        <button 
-          onClick={() => navigate('/products/create')}
-          className="px-4 py-2 bg-[#8B4513] text-white rounded-lg hover:bg-[#A0522D]"
-        >
-          Add Product
-        </button>
       </div>
 
       {!selectedCategory ? (
@@ -180,7 +174,7 @@ const Products = () => {
         <div>
           <button
             onClick={() => setSelectedCategory(null)}
-            className="mb-6 flex items-center text-[#8B4513] hover:underline"
+            className="mb-6 flex items-center text-[#543310] hover:underline"
           >
             ← Back to Categories
           </button>

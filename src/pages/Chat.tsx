@@ -140,7 +140,7 @@ const Chat = () => {
                   className={`max-w-[70%] rounded-lg p-3 ${
                     message.isCustomer
                       ? 'bg-gray-100'
-                      : 'bg-[#8B4513] text-white'
+                      : 'bg-[#543310] text-white'
                   }`}
                 >
                   <p className="text-sm">{message.content}</p>
@@ -158,9 +158,9 @@ const Chat = () => {
                 value={newMessage}
                 onChange={(e) => setNewMessage(e.target.value)}
                 placeholder="Type a message..."
-                className="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B4513]"
+                className="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#543310]"
               />
-              <button className="p-2 bg-[#8B4513] text-white rounded-lg hover:bg-[#A0522D]">
+              <button className="p-2 bg-[#543310] text-white rounded-lg hover:bg-[#A0522D]">
                 <Send className="w-5 h-5" />
               </button>
             </div>

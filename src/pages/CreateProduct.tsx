@@ -54,7 +54,7 @@ const CreateProduct = () => {
           <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
             <Upload className="w-12 h-12 mx-auto text-gray-400 mb-4" />
             <div className="text-sm text-gray-600">
-              <label className="relative cursor-pointer rounded-md font-medium text-[#8B4513] hover:text-[#A0522D] focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-[#8B4513]">
+              <label className="relative cursor-pointer rounded-md font-medium text-[#543310] hover:text-[#A0522D] focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-[#543310]">
                 <span>Upload a file</span>
                 <input
                   type="file"
@@ -84,7 +84,7 @@ const CreateProduct = () => {
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#8B4513] focus:ring focus:ring-[#8B4513] focus:ring-opacity-50"
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#543310] focus:ring focus:ring-[#543310] focus:ring-opacity-50"
                 required
               />
             </div>
@@ -97,7 +97,7 @@ const CreateProduct = () => {
                 name="category"
                 value={formData.category}
                 onChange={handleChange}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#8B4513] focus:ring focus:ring-[#8B4513] focus:ring-opacity-50"
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#543310] focus:ring focus:ring-[#543310] focus:ring-opacity-50"
                 required
               >
                 <option value="">Select a category</option>
@@ -121,7 +121,7 @@ const CreateProduct = () => {
                   onChange={handleChange}
                   min="0"
                   step="0.01"
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#8B4513] focus:ring focus:ring-[#8B4513] focus:ring-opacity-50"
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#543310] focus:ring focus:ring-[#543310] focus:ring-opacity-50"
                   required
                 />
               </div>
@@ -136,7 +136,7 @@ const CreateProduct = () => {
                   value={formData.stock}
                   onChange={handleChange}
                   min="0"
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#8B4513] focus:ring focus:ring-[#8B4513] focus:ring-opacity-50"
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#543310] focus:ring focus:ring-[#543310] focus:ring-opacity-50"
                   required
                 />
               </div>
@@ -151,7 +151,7 @@ const CreateProduct = () => {
                 value={formData.description}
                 onChange={handleChange}
                 rows={4}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#8B4513] focus:ring focus:ring-[#8B4513] focus:ring-opacity-50"
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#543310] focus:ring focus:ring-[#543310] focus:ring-opacity-50"
                 required
               />
             </div>
@@ -167,7 +167,7 @@ const CreateProduct = () => {
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-[#8B4513] text-white rounded-lg hover:bg-[#A0522D]"
+              className="px-4 py-2 bg-[#543310] text-white rounded-lg hover:bg-[#A0522D]"
             >
               Create Product
             </button>

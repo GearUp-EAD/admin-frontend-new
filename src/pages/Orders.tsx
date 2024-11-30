@@ -56,7 +56,7 @@ const Orders = () => {
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold">Orders</h2>
         <div className="flex space-x-4">
-          <select className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B4513]">
+          <select className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#543310]">
             <option>All Orders</option>
             <option>Processing</option>
             <option>Shipped</option>
@@ -164,7 +164,7 @@ const Orders = () => {
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <button className="text-[#8B4513] hover:text-[#A0522D]">
+                    <button className="text-[#543310] hover:text-[#A0522D]">
                       <Eye className="w-5 h-5" />
                     </button>
                   </td>

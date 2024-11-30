@@ -42,7 +42,7 @@ const Login = () => {
       <div className="hidden lg:block lg:w-1/2">
         <img
           src="https://images.unsplash.com/photo-1542291026-7eec264c27ff"
-          alt="Sports Store"
+          alt="EliteGear"
           className="w-full h-full object-cover"
         />
       </div>
@@ -51,7 +51,7 @@ const Login = () => {
       <div className="w-full lg:w-1/2 flex items-center justify-center p-8">
         <div className="max-w-md w-full">
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-[#8B4513] mb-2">EliteGear</h1>
+            <h1 className="text-3xl font-bold text-[#543310] mb-2">EliteGear</h1>
             <p className="text-gray-600">
               Admin Dashboard - Manage your sports store
             </p>
@@ -71,7 +71,7 @@ const Login = () => {
                 value={formData.email}
                 onChange={handleChange}
                 placeholder="Email"
-                className="w-full px-4 py-3 rounded-lg bg-gray-100 border border-gray-300 focus:border-[#8B4513] focus:ring-2 focus:ring-[#8B4513] focus:ring-opacity-50"
+                className="w-full px-4 py-3 rounded-lg bg-gray-100 border border-gray-300 focus:border-[#543310] focus:ring-2 focus:ring-[#543310] focus:ring-opacity-50"
                 required
               />
             </div>
@@ -83,7 +83,7 @@ const Login = () => {
                 value={formData.password}
                 onChange={handleChange}
                 placeholder="Password"
-                className="w-full px-4 py-3 rounded-lg bg-gray-100 border border-gray-300 focus:border-[#8B4513] focus:ring-2 focus:ring-[#8B4513] focus:ring-opacity-50"
+                className="w-full px-4 py-3 rounded-lg bg-gray-100 border border-gray-300 focus:border-[#543310] focus:ring-2 focus:ring-[#543310] focus:ring-opacity-50"
                 required
               />
             </div>
@@ -91,7 +91,7 @@ const Login = () => {
             <div className="flex items-center justify-end">
               <button
                 type="button"
-                className="text-sm text-[#8B4513] hover:underline"
+                className="text-sm text-[#543310] hover:underline"
               >
                 Forgot Password?
               </button>
@@ -99,7 +99,7 @@ const Login = () => {
 
             <button
               type="submit"
-              className="w-full py-3 bg-[#8B4513] text-white rounded-lg hover:bg-[#A0522D] transition-colors"
+              className="w-full py-3 bg-[#543310] text-white rounded-lg hover:bg-[#A0522D] transition-colors"
             >
               Login
             </button>

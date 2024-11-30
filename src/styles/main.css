@@ -36,11 +36,11 @@
 
   /* Forms */
   .form-input {
-    @apply mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#8B4513] focus:ring focus:ring-[#8B4513] focus:ring-opacity-50;
+    @apply mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#543310] focus:ring focus:ring-[#543310] focus:ring-opacity-50;
   }
 
   .btn-primary {
-    @apply px-4 py-2 bg-[#8B4513] text-white rounded-lg hover:bg-[#A0522D];
+    @apply px-4 py-2 bg-[#543310] text-white rounded-lg hover:bg-[#A0522D];
   }
 
   .btn-secondary {
@@ -65,7 +65,7 @@
   }
 
   .product-price {
-    @apply text-[#8B4513] font-bold mt-2;
+    @apply text-[#543310] font-bold mt-2;
   }
 
   .product-stats {

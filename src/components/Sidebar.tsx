@@ -13,10 +13,16 @@ const navItems = [
 
 const Sidebar = () => {
   return (
-    <div className="h-full bg-white border-r border-gray-200 p-6">
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-[#8B4513]">SportStore</h1>
-      </div>
+    <div className="h-full bg-white border-r border-gray-200 p-3 ">
+      <div className="  mb--4 flex items-center justify-between">
+  <h1 className="text-2xl font-bold text-[#543310]">EliteGear</h1>
+  <img 
+    src="./src/assets/Logo.png" 
+    alt="EliteGear Logo" 
+    className="h-36 w-36 object-contain mb--5" 
+  />
+</div>
+
       
       <nav className="space-y-2">
         {navItems.map((item) => (
@@ -26,7 +32,7 @@ const Sidebar = () => {
             className={({ isActive }) =>
               `flex items-center px-4 py-3 rounded-lg transition-colors ${
                 isActive
-                  ? 'text-white bg-[#8B4513]'
+                  ? 'text-white bg-[#543310]'
                   : 'text-gray-600 hover:bg-gray-100'
               }`
             }
@@ -43,7 +49,7 @@ const Sidebar = () => {
           className={({ isActive }) =>
             `flex items-center px-4 py-3 rounded-lg transition-colors ${
               isActive
-                ? 'text-white bg-[#8B4513]'
+                ? 'text-white bg-[#543310]'
                 : 'text-gray-600 hover:bg-gray-100'
             }`
           }

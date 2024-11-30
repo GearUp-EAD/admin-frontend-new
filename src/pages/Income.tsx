@@ -43,7 +43,7 @@ const Income = () => {
     <div>
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold">Income</h2>
-        <select className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B4513]">
+        <select className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#543310]">
           <option>Last 6 Months</option>
           <option>Last Year</option>
           <option>All Time</option>
@@ -99,9 +99,9 @@ const Income = () => {
                 <Line
                   type="monotone"
                   dataKey="income"
-                  stroke="#8B4513"
+                  stroke="#543310"
                   strokeWidth={2}
-                  dot={{ fill: '#8B4513' }}
+                  dot={{ fill: '#543310' }}
                 />
               </LineChart>
             </ResponsiveContainer>

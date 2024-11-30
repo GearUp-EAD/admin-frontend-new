@@ -51,7 +51,7 @@ const Header = ({ toggleMobileSidebar }) => {
             <input
               type="text"
               placeholder="Search products, orders..."
-              className="w-full pl-10 pr-4 py-2 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B4513]"
+              className="w-full pl-10 pr-4 py-2 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#543310]"
             />
           </div>
         </div>
@@ -59,7 +59,7 @@ const Header = ({ toggleMobileSidebar }) => {
         <div className="flex items-center space-x-4">
           <button 
             onClick={() => navigate('/products/create')}
-            className="flex items-center px-4 py-2 bg-[#8B4513] text-white rounded-lg hover:bg-[#A0522D] transition-colors"
+            className="flex items-center px-4 py-2 bg-[#543310] text-white rounded-lg hover:bg-[#A0522D] transition-colors"
           >
             <Plus className="w-5 h-5 mr-2" />
             <span className="hidden sm:inline">Add Product</span>
@@ -97,7 +97,7 @@ const Header = ({ toggleMobileSidebar }) => {
                   </div>
                 ))}
                 <div className="px-4 py-2 border-t border-gray-200">
-                  <button className="text-[#8B4513] text-sm hover:underline w-full text-center">
+                  <button className="text-[#543310] text-sm hover:underline w-full text-center">
                     View All Notifications
                   </button>
                 </div>

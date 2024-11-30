@@ -55,7 +55,7 @@ const Profile = () => {
                 alt="Profile"
                 className="w-24 h-24 rounded-full object-cover"
               />
-              <button className="absolute bottom-0 right-0 p-2 bg-[#8B4513] text-white rounded-full hover:bg-[#A0522D]">
+              <button className="absolute bottom-0 right-0 p-2 bg-[#543310] text-white rounded-full hover:bg-[#A0522D]">
                 <Camera className="w-4 h-4" />
               </button>
             </div>
@@ -76,7 +76,7 @@ const Profile = () => {
                 name="firstName"
                 value={formData.firstName}
                 onChange={handleChange}
-                className="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-[#8B4513] focus:border-[#8B4513]"
+                className="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-[#543310] focus:border-[#543310]"
               />
             </div>
             <div>
@@ -88,7 +88,7 @@ const Profile = () => {
                 name="lastName"
                 value={formData.lastName}
                 onChange={handleChange}
-                className="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-[#8B4513] focus:border-[#8B4513]"
+                className="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-[#543310] focus:border-[#543310]"
               />
             </div>
             <div>
@@ -100,7 +100,7 @@ const Profile = () => {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                className="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-[#8B4513] focus:border-[#8B4513]"
+                className="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-[#543310] focus:border-[#543310]"
               />
             </div>
             <div>
@@ -112,7 +112,7 @@ const Profile = () => {
                 name="phone"
                 value={formData.phone}
                 onChange={handleChange}
-                className="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-[#8B4513] focus:border-[#8B4513]"
+                className="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-[#543310] focus:border-[#543310]"
               />
             </div>
           </div>
@@ -134,7 +134,7 @@ const Profile = () => {
                     onChange={handleNotificationChange}
                     className="sr-only peer"
                   />
-                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#8B4513]/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#8B4513]"></div>
+                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#543310]/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#543310]"></div>
                 </label>
               </div>
               <div className="flex items-center justify-between">
@@ -150,7 +150,7 @@ const Profile = () => {
                     onChange={handleNotificationChange}
                     className="sr-only peer"
                   />
-                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#8B4513]/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#8B4513]"></div>
+                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#543310]/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#543310]"></div>
                 </label>
               </div>
             </div>
@@ -160,7 +160,7 @@ const Profile = () => {
           <div className="flex justify-end">
             <button
               type="submit"
-              className="flex items-center px-6 py-2 bg-[#8B4513] text-white rounded-lg hover:bg-[#A0522D]"
+              className="flex items-center px-6 py-2 bg-[#543310] text-white rounded-lg hover:bg-[#A0522D]"
             >
               <Save className="w-4 h-4 mr-2" />
               Save Changes
