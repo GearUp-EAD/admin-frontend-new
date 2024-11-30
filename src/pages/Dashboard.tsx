@@ -39,7 +39,7 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Welcome Section */}
+      
       <div className="mb-8">
         <h3 className="text-lg font-semibold mb-4">Our New Customers</h3>
         <div className="flex space-x-6 overflow-x-auto pb-4">
@@ -76,22 +76,20 @@ const Dashboard = () => {
             <option>Last Week</option>
           </select>
         </div>
-        <div className="h-80">
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={chartData}>
-              <CartesianGrid strokeDasharray="3 3" vertical={false} />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <Line
-                type="monotone"
-                dataKey="value"
-                stroke="#543310"
-                strokeWidth={2}
-                dot={{ fill: '#543310' }}
-              />
-            </LineChart>
-          </ResponsiveContainer>
+        <div className="h-[300px] w-full">
+          <LineChart width={800} height={300} data={chartData}>
+            <CartesianGrid strokeDasharray="3 3" vertical={false} />
+            <XAxis dataKey="name" />
+            <YAxis />
+            <Tooltip />
+            <Line
+              type="monotone"
+              dataKey="value"
+              stroke="#8B4513"
+              strokeWidth={2}
+              dot={{ fill: '#8B4513' }}
+            />
+          </LineChart>
         </div>
       </div>
     </div>
