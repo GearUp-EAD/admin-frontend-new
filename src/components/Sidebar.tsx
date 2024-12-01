@@ -30,12 +30,12 @@ const Sidebar = () => {
   
   return (
     <div className="h-full bg-white border-r border-gray-200 p-3 ">
-      <div className="  mb--4 flex items-center justify-between">
+      <div className="  mb-4 flex items-center justify-between">
   <h1 className="text-2xl font-bold text-[#543310]">EliteGear</h1>
   <img 
     src="./src/assets/Logo.png" 
     alt="EliteGear Logo" 
-    className="h-36 w-36 object-contain mb--5" 
+    className="h-20 w-20 object-contain mr-7" 
   />
 </div>
 
