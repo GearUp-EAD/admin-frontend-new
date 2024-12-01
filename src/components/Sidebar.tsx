@@ -1,7 +1,11 @@
 import React from 'react';
+import { useContext,useCallback} from 'react';
+
 import { NavLink } from 'react-router-dom';
 import { Home, Package, Users, ShoppingCart, DollarSign, MessageCircle, HelpCircle, LogOut } from 'lucide-react';
 import { useKeycloak } from '@react-keycloak/web';
+import { AuthContext } from '../KeycloakProvider';
+
 
 const navItems = [
   { icon: <Home className="w-5 h-5 mr-3" />, label: 'Home', path: '/' },
@@ -14,10 +18,14 @@ const navItems = [
 
 const Sidebar = () => {
 
+  const { logout } = useContext(AuthContext);
   
-  const handleLogout = () => {
-   
-  };
+  const handleLogout = useCallback(() => {
+    const confirmed = window.confirm('Are you sure you want to logout?');
+    if (confirmed) {
+      logout();
+    }
+  }, [logout]);
 
   
   return (
