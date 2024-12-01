@@ -3,75 +3,80 @@ import { Edit, Trash2, ChevronRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 
+// Categories with item counts
 const categories = [
-  {
-    id: 1,
-    name: 'Basketball',
-    image: 'https://images.unsplash.com/photo-1494199505258-5f95387f933c?w=300&fit=crop',
-    itemCount: 45,
-  },
-  {
-    id: 2,
-    name: 'Tennis',
-    image: 'https://images.unsplash.com/photo-1617083277662-50296a341b93?w=300&fit=crop',
-    itemCount: 32,
-  },
-  {
-    id: 3,
-    name: 'Football',
-    image: 'https://images.unsplash.com/photo-1552318965-6e6be7484ada?w=300&fit=crop',
-    itemCount: 28,
-  },
-  {
-    id: 4,
-    name: 'Cricket',
-    image: 'https://images.unsplash.com/photo-1531415074968-036ba1b575da?w=300&fit=crop',
-    itemCount: 35,
-  },
-  {
-    id: 5,
-    name: 'Swimming',
-    image: 'https://images.unsplash.com/photo-1601808881948-aa5cc744c8d9?w=300&fit=crop',
-    itemCount: 24,
-  },
+  { id: 1, name: 'Accessories', image: 'https://via.placeholder.com/300', itemCount: 25 },
+  { id: 2, name: 'Apparels', image: 'https://via.placeholder.com/300', itemCount: 30 },
+  { id: 3, name: 'Equipments', image: 'https://via.placeholder.com/300', itemCount: 20 },
+  { id: 4, name: 'Footwear', image: 'https://via.placeholder.com/300', itemCount: 15 },
+  { id: 5, name: 'Nutrition & Health', image: 'https://via.placeholder.com/300', itemCount: 10 },
 ];
 
+// Products categorized by main categories and subcategories
 const products = {
-  Basketball: [
-    {
-      id: 1,
-      name: 'Professional Basketball',
-      price: 29.99,
-      stock: 150,
-      image: 'https://images.unsplash.com/photo-1494199505258-5f95387f933c?w=100&fit=crop',
-    },
-    {
-      id: 2,
-      name: 'Basketball Shoes Elite',
-      price: 129.99,
-      stock: 75,
-      image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=100&fit=crop',
-    },
-  ],
-  Tennis: [
-    {
-      id: 3,
-      name: 'Tennis Racket Pro',
-      price: 199.99,
-      stock: 45,
-      image: 'https://images.unsplash.com/photo-1617083277662-50296a341b93?w=100&fit=crop',
-    },
-  ],
-  // Add more products for other categories
+  Accessories: {
+    'Caps and Hats': [
+      { id: 1, name: 'Baseball Cap', price: 9.99, stock: 100, image: 'https://via.placeholder.com/100' },
+      { id: 2, name: 'Sun Hat', price: 14.99, stock: 50, image: 'https://via.placeholder.com/100' },
+    ],
+    Gloves: [
+      { id: 3, name: 'Winter Gloves', price: 14.99, stock: 75, image: 'https://via.placeholder.com/100' },
+      { id: 4, name: 'Boxing Gloves', price: 19.99, stock: 60, image: 'https://via.placeholder.com/100' },
+    ],
+    'Head and Wrist Bands': [
+      { id: 5, name: 'Sweat Band', price: 7.99, stock: 80, image: 'https://via.placeholder.com/100' },
+    ],
+    Socks: [
+      { id: 6, name: 'Sports Socks', price: 5.99, stock: 120, image: 'https://via.placeholder.com/100' },
+    ],
+    Sunglasses: [
+      { id: 7, name: 'Sports Sunglasses', price: 24.99, stock: 40, image: 'https://via.placeholder.com/100' },
+    ],
+  },
+  Apparels: {
+    Compression: [
+      { id: 8, name: 'Compression Shirt', price: 29.99, stock: 50, image: 'https://via.placeholder.com/100' },
+    ],
+    'Running Shorts': [
+      { id: 9, name: 'Running Shorts', price: 19.99, stock: 100, image: 'https://via.placeholder.com/100' },
+    ],
+  },
+  Equipments: {
+    Basketball: [
+      { id: 10, name: 'Basketball', price: 19.99, stock: 200, image: 'https://via.placeholder.com/100' },
+    ],
+    'Fitness Bands': [
+      { id: 11, name: 'Fitness Band', price: 39.99, stock: 70, image: 'https://via.placeholder.com/100' },
+    ],
+  },
+  Footwear: {
+    'Running Shoes': [
+      { id: 12, name: 'Running Shoes', price: 79.99, stock: 80, image: 'https://via.placeholder.com/100' },
+    ],
+  },
+  'Nutrition & Health': {
+    'Energy Bars': [
+      { id: 13, name: 'Energy Bar', price: 1.99, stock: 500, image: 'https://via.placeholder.com/100' },
+    ],
+    'Protein Powder': [
+      { id: 14, name: 'Protein Powder', price: 29.99, stock: 40, image: 'https://via.placeholder.com/100' },
+    ],
+  },
 };
 
 const Products = () => {
   const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedSubCategory, setSelectedSubCategory] = useState(null);
   const [productsList, setProductsList] = useState(products);
 
   const handleCategoryClick = (categoryName) => {
     setSelectedCategory(categoryName);
+    setSelectedSubCategory(null);
+  };
+
+  const handleSubCategoryClick = (subCategoryName) => {
+    setSelectedSubCategory(subCategoryName);
   };
 
   const handleEdit = (product) => {
@@ -97,15 +102,16 @@ const Products = () => {
       if (result.isConfirmed) {
         const updatedProducts = { ...productsList };
         const categoryProducts = updatedProducts[selectedCategory];
-        const productIndex = categoryProducts.findIndex(p => p.id === product.id);
-        
+        const subCategoryProducts = categoryProducts[selectedSubCategory];
+        const productIndex = subCategoryProducts.findIndex((p) => p.id === product.id);
+
         if (productIndex !== -1) {
-          categoryProducts[productIndex] = {
-            ...categoryProducts[productIndex],
+          subCategoryProducts[productIndex] = {
+            ...subCategoryProducts[productIndex],
             ...result.value,
           };
           setProductsList(updatedProducts);
-          
+
           Swal.fire('Updated!', 'Product has been updated.', 'success');
         }
       }
@@ -120,19 +126,16 @@ const Products = () => {
       showCancelButton: true,
       confirmButtonColor: '#543310',
       cancelButtonColor: '#6B7280',
-      confirmButtonText: 'Yes, delete it!'
+      confirmButtonText: 'Yes, delete it!',
     }).then((result) => {
       if (result.isConfirmed) {
         const updatedProducts = { ...productsList };
-        updatedProducts[selectedCategory] = updatedProducts[selectedCategory]
-          .filter(p => p.id !== product.id);
-        setProductsList(updatedProducts);
-        
-        Swal.fire(
-          'Deleted!',
-          'Product has been deleted.',
-          'success'
+        updatedProducts[selectedCategory][selectedSubCategory] = updatedProducts[selectedCategory][selectedSubCategory].filter(
+          (p) => p.id !== product.id
         );
+        setProductsList(updatedProducts);
+
+        Swal.fire('Deleted!', 'Product has been deleted.', 'success');
       }
     });
   };
@@ -144,7 +147,6 @@ const Products = () => {
       </div>
 
       {!selectedCategory ? (
-        // Categories Grid View
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {categories.map((category) => (
             <div
@@ -169,8 +171,7 @@ const Products = () => {
             </div>
           ))}
         </div>
-      ) : (
-        // Products List View
+      ) : !selectedSubCategory ? (
         <div>
           <button
             onClick={() => setSelectedCategory(null)}
@@ -178,72 +179,73 @@ const Products = () => {
           >
             ← Back to Categories
           </button>
-          
-          <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Product
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Price
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Stock
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Actions
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {productsList[selectedCategory]?.map((product) => (
-                    <tr key={product.id}>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center">
-                          <img
-                            className="h-10 w-10 rounded-full object-cover"
-                            src={product.image}
-                            alt={product.name}
-                          />
-                          <div className="ml-4">
-                            <div className="text-sm font-medium text-gray-900">
-                              {product.name}
-                            </div>
-                            <div className="text-sm text-gray-500">
-                              #{product.id}
-                            </div>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        ${product.price}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {product.stock}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <button
-                          onClick={() => handleEdit(product)}
-                          className="text-indigo-600 hover:text-indigo-900 mr-4"
-                        >
-                          <Edit className="w-5 h-5" />
-                        </button>
-                        <button
-                          onClick={() => handleDelete(product)}
-                          className="text-red-600 hover:text-red-900"
-                        >
-                          <Trash2 className="w-5 h-5" />
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {Object.keys(productsList[selectedCategory]).map((subCategory) => (
+              <div
+                key={subCategory}
+                onClick={() => handleSubCategoryClick(subCategory)}
+                className="bg-white rounded-xl shadow-sm overflow-hidden cursor-pointer hover:shadow-md transition-shadow"
+              >
+                <div className="relative h-48">
+                  <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+                    <h3 className="text-white text-2xl font-bold">{subCategory}</h3>
+                  </div>
+                </div>
+                <div className="p-4 flex justify-between items-center">
+                  <span className="text-gray-600">
+                    {productsList[selectedCategory][subCategory].length} items
+                  </span>
+                  <ChevronRight className="w-5 h-5 text-gray-400" />
+                </div>
+              </div>
+            ))}
           </div>
+        </div>
+      ) : (
+        <div>
+          <button
+            onClick={() => setSelectedSubCategory(null)}
+            className="mb-6 flex items-center text-[#543310] hover:underline"
+          >
+            ← Back to Subcategories
+          </button>
+          <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
+            <thead>
+              <tr>
+                <th className="px-6 py-3 text-sm font-medium text-left text-gray-500">Image</th>
+                <th className="px-6 py-3 text-sm font-medium text-left text-gray-500">Name</th>
+                <th className="px-6 py-3 text-sm font-medium text-left text-gray-500">Price</th>
+                <th className="px-6 py-3 text-sm font-medium text-left text-gray-500">Stock</th>
+                <th className="px-6 py-3 text-sm font-medium text-left text-gray-500">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {productsList[selectedCategory][selectedSubCategory].map((product) => (
+                <tr key={product.id}>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <img
+                      src={product.image}
+                      alt={product.name}
+                      className="w-12 h-12 object-cover rounded-lg"
+                    />
+                  </td>
+                  <td className="px-6 py-4 text-sm text-gray-500">{product.name}</td>
+                  <td className="px-6 py-4 text-sm text-gray-500">${product.price.toFixed(2)}</td>
+                  <td className="px-6 py-4 text-sm text-gray-500">{product.stock}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <div className="flex gap-4">
+                      <button onClick={() => handleEdit(product)}>
+                        <Edit className="text-gray-500 hover:text-[#543310]" />
+                      </button>
+                      <button onClick={() => handleDelete(product)}>
+                        <Trash2 className="text-gray-500 hover:text-red-500" />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
     </div>
