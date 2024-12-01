@@ -22,7 +22,7 @@ const Login = () => {
     if (formData.email === ADMIN_EMAIL && formData.password === ADMIN_PASSWORD) {
       // Set auth status in localStorage
       localStorage.setItem('isAuthenticated', 'true');
-      navigate('/Dashboard'); // Redirect to dashboard
+      navigate('/'); // Redirect to dashboard
     } else {
       setError('Invalid email or password');
     }
