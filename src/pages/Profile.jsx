@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Camera, Save } from 'lucide-react';
+import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import { storage } from '../firebase.js'; // Import the Firebase storage instance
 
 const Profile = () => {
   const [formData, setFormData] = useState({
@@ -16,9 +18,44 @@ const Profile = () => {
     },
   });
 
+  const [profileImage, setProfileImage] = useState(
+    'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop'
+  );
+  const [uploading, setUploading] = useState(false);
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const storageRef = ref(storage, `profile-images/${file.name}`);
+      const uploadTask = uploadBytesResumable(storageRef, file);
+
+      setUploading(true);
+
+      uploadTask.on(
+        'state_changed',
+        (snapshot) => {
+          // Optional: Track progress
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log(`Upload is ${progress}% done`);
+        },
+        (error) => {
+          console.error('Upload failed:', error);
+          setUploading(false);
+        },
+        async () => {
+          // Upload complete
+          const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+          setProfileImage(downloadURL);
+          setUploading(false);
+        }
+      );
+    }
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
@@ -26,7 +63,7 @@ const Profile = () => {
 
   const handleNotificationChange = (e) => {
     const { name, checked } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       notifications: {
         ...prev.notifications,
@@ -51,17 +88,28 @@ const Profile = () => {
           <div className="flex items-center space-x-6 mb-8">
             <div className="relative">
               <img
-                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop"
+                src={profileImage}
                 alt="Profile"
                 className="w-24 h-24 rounded-full object-cover"
               />
-              <button className="absolute bottom-0 right-0 p-2 bg-[#543310] text-white rounded-full hover:bg-[#A0522D]">
+              <label
+                htmlFor="profile-image"
+                className="absolute bottom-0 right-0 p-2 bg-[#543310] text-white rounded-full hover:bg-[#A0522D] cursor-pointer"
+              >
                 <Camera className="w-4 h-4" />
-              </button>
+                <input
+                  id="profile-image"
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleImageChange}
+                />
+              </label>
             </div>
             <div>
               <h3 className="text-lg font-medium">Profile Photo</h3>
               <p className="text-sm text-gray-500">Update your profile picture</p>
+              {uploading && <p className="text-sm text-blue-500">Uploading...</p>}
             </div>
           </div>
 
@@ -131,22 +179,6 @@ const Profile = () => {
                     type="checkbox"
                     name="email"
                     checked={formData.notifications.email}
-                    onChange={handleNotificationChange}
-                    className="sr-only peer"
-                  />
-                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#543310]/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#543310]"></div>
-                </label>
-              </div>
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="font-medium">Push Notifications</p>
-                  <p className="text-sm text-gray-500">Receive push notifications</p>
-                </div>
-                <label className="relative inline-flex items-center cursor-pointer">
-                  <input
-                    type="checkbox"
-                    name="push"
-                    checked={formData.notifications.push}
                     onChange={handleNotificationChange}
                     className="sr-only peer"
                   />
