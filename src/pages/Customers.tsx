@@ -1,46 +1,89 @@
 import React from 'react';
 import { Mail, Phone, MoreVertical } from 'lucide-react';
+import { useState,useEffect } from 'react';
 
-const customers = [
-  {
-    id: 1,
-    name: 'Johnson D.',
-    email: 'johnson@example.com',
-    phone: '+1 234-567-8901',
-    orders: 12,
-    spent: 2890.00,
-    image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop',
-  },
-  {
-    id: 2,
-    name: 'Dianne I.',
-    email: 'dianne@example.com',
-    phone: '+1 234-567-8902',
-    orders: 8,
-    spent: 1490.00,
-    image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop',
-  },
-  {
-    id: 3,
-    name: 'Penny L.',
-    email: 'penny@example.com',
-    phone: '+1 234-567-8903',
-    orders: 15,
-    spent: 3240.00,
-    image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop',
-  },
-  {
-    id: 4,
-    name: 'Evan M.',
-    email: 'evan@example.com',
-    phone: '+1 234-567-8904',
-    orders: 10,
-    spent: 2150.00,
-    image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop',
-  },
-];
-
+interface Customer {
+  customerID: string;
+  name: string;
+  email: string;
+  phoneNumber: string;
+  address: string;
+  imageUrl?: string; // Optional property
+}
 const Customers = () => {
+  const [customers, setCustomers] = useState<Customer[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [orderCounts, setOrderCounts] = useState<{ [key: string]: number }>({});
+  const [totalAmounts, setTotalAmounts] = useState<{ [key: string]: number }>({});
+
+  useEffect(() => {
+    const fetchCustomers = async () => {
+      try {
+        const response = await fetch('http://localhost:8080/api/customers');
+        const data = await response.json();
+        setCustomers(data);
+        setLoading(false);
+      } catch (err) {
+        setError(err.message);
+        setLoading(false);
+      }
+    };
+  
+
+    const getOrderCounts = async () => {
+      const counts: { [key: string]: number } = {};
+      for (const customer of customers) {
+        counts[customer.customerID] = await fetchOrderCount(customer.customerID);
+      }
+      setOrderCounts(counts);
+    };
+
+    const getTotalAmounts = async () => {
+      const amounts: { [key: string]: number } = {};
+      for (const customer of customers) {
+        amounts[customer.customerID] = await fetchTotalAmount(customer.customerID);
+      }
+      setTotalAmounts(amounts);
+    };
+  
+    if (customers.length > 0) {
+      getTotalAmounts();
+    }
+  
+    if (customers.length > 0) {
+      getOrderCounts();
+    }
+
+    fetchCustomers();
+  }, [customers]);
+
+  const fetchOrderCount = async (customerId: string) => {
+    try {
+      const response = await fetch(`http://localhost:8080/api/orders/customer/${customerId}`);
+      const data = await response.json();
+      return data.length; // Assuming the API returns an array of orders
+    } catch (error) {
+      console.error('Error fetching orders:', error);
+      return 0;
+    }
+  };
+
+  const fetchTotalAmount = async (customerId: string) => {
+    try {
+      const response = await fetch(`http://localhost:8080/api/orders/totalAmount/${customerId}`);
+      const amount = await response.json();
+      console.log(amount);
+      return amount;
+    } catch (error) {
+      console.error('Error fetching total amount:', error);
+      return 0;
+    }
+  };
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
+
   return (
     <div>
       <h2 className="text-2xl font-bold mb-6">Customers</h2>
@@ -62,19 +105,19 @@ const Customers = () => {
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Total Spent
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                {/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Actions
-                </th>
+                </th> */}
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {customers.map((customer) => (
-                <tr key={customer.id}>
+                <tr key={customer.customerID}>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
                       <img
                         className="h-10 w-10 rounded-full"
-                        src={customer.image}
+                        src={customer.imageUrl}
                         alt={customer.name}
                       />
                       <div className="ml-4">
@@ -92,21 +135,21 @@ const Customers = () => {
                       </div>
                       <div className="flex items-center text-sm text-gray-500">
                         <Phone className="w-4 h-4 mr-2" />
-                        {customer.phone}
+                        {customer.phoneNumber}
                       </div>
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {customer.orders}
+                  {orderCounts[customer.customerID] || 0}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    ${customer.spent.toFixed(2)}
+                  ${totalAmounts[customer.customerID]?.toFixed(2) || '0.00'}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                  {/* <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <button className="text-gray-400 hover:text-gray-500">
                       <MoreVertical className="w-5 h-5" />
                     </button>
-                  </td>
+                  </td> */}
                 </tr>
               ))}
             </tbody>
