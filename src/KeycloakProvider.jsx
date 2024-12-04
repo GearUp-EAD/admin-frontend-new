@@ -9,6 +9,7 @@ const KeycloakProvider = ({ children }) => {
   useEffect(() => {
     keycloak.init({ onLoad: 'login-required' }).then((authenticated) => {
       setIsAuthenticated(authenticated);
+      
     });
   }, []);
 

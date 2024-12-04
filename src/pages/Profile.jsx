@@ -46,6 +46,7 @@ const Profile = () => {
         async () => {
           // Upload complete
           const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+          console.log('File available at', downloadURL);
           setProfileImage(downloadURL);
           setUploading(false);
         }
