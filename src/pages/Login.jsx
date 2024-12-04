@@ -104,13 +104,7 @@ const Login = () => {
               Login
             </button>
 
-            <div className="text-center text-sm text-gray-600 mt-4">
-              Use these credentials to login:
-              <br />
-              Email: admin@elitegear.com
-              <br />
-              Password: admin123
-            </div>
+        
           </form>
         </div>
       </div>
