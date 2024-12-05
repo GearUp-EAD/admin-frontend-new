@@ -42,9 +42,10 @@ const CreateProduct = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch('http://localhost:8080/api/categories');
+      const response = await fetch('http://localhost:8080/api/categories/parents');
       const data = await response.json();
       setCategories(data);
+      console.log(data);
     } catch (error) {
       console.error('Error fetching categories:', error);
     }
