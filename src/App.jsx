@@ -15,6 +15,7 @@ import Chat from './pages/Chat';
 import Help from './pages/Help';
 import Profile from './pages/Profile';
 import ProtectedRoutes from './context/ProtectedRoutes';
+import PublicPage from './pages/PublicPage'; // Ensure this import is correct
 
 
 
@@ -25,7 +26,8 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Layout />}>
-            <Route element={<ProtectedRoutes />}>
+          <Route path="public" element={<PublicPage />} /> {/* Public route */}
+          <Route element={<ProtectedRoutes />}>
               <Route index element={<Dashboard />} />
               <Route path="products" element={<Products />} />
               <Route path="products/create" element={<CreateProduct />} />

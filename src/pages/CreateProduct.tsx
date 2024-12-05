@@ -64,6 +64,12 @@ const categories = {
   },
 };
 
+const sizeTypes = {
+  tshirt: ['S', 'M', 'L', 'XL'],
+  shoes: ['6', '7', '8', '9', '10', '11', '12']
+};
+
+
 const CreateProduct = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState<ProductForm>({
@@ -74,7 +80,12 @@ const CreateProduct = () => {
     stock: '',
     description: '',
     image: '',
-    size: '', // Add size in form data
+    size: '', 
+  });
+
+  const [variatdata, setvariatdata] = useState({
+    size: '',
+    productType: 'tshirt' // Default product type
   });
  
   const [loading, setLoading] = useState(true);
@@ -89,7 +100,7 @@ const CreateProduct = () => {
       description: formData.description,
       basePrice: parseFloat(formData.price),
       categoryId: categories[formData.category].id,
-      imageUrl: formData.image, // Here assuming the file name
+      imageUrl: formData.image, 
       variants: [
         {
           sizeId: categories[formData.category].subcategories[formData.subcategory], // Assign sizeId based on selected category and subcategory
@@ -126,6 +137,17 @@ const CreateProduct = () => {
     });
   };
 
+  const handleVariantChanges =(
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+  ) => {
+    setvariatdata({
+      ...variatdata,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  
+
   return (
     <div>
       <div className="flex items-center mb-6">
@@ -155,7 +177,7 @@ const CreateProduct = () => {
                     if (e.target.files) {
                       setFormData({
                         ...formData,
-                        image: e.target.files[0].name, // Simulate upload
+                        image: e.target.files[0].name, 
                       });
                     }
                   }}
@@ -166,7 +188,6 @@ const CreateProduct = () => {
             <p className="text-xs text-gray-500 mt-2">PNG, JPG, GIF up to 10MB</p>
           </div>
 
-          {/* Product Details */}
           <div className="grid grid-cols-1 gap-6">
             <div>
               <label className="block text-sm font-medium text-gray-700">Product Name</label>
@@ -180,7 +201,6 @@ const CreateProduct = () => {
               />
             </div>
 
-            {/* Category Selection */}
             <div>
               <label className="block text-sm font-medium text-gray-700">Category</label>
               <select
@@ -226,22 +246,43 @@ const CreateProduct = () => {
             {/* Size Selection */}
             {formData.subcategory && (
               <div>
+              <label className="block text-sm font-medium text-gray-700">Product Type</label>
+              <select
+                name="productType"
+                value={variatdata.productType}
+                onChange={handleVariantChanges}
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#543310] focus:ring focus:ring-[#543310] focus:ring-opacity-50"
+                required
+              >
+                <option value="">Select a product type</option>
+                {Object.keys(sizeTypes).map((type) => (
+                  <option key={type} value={type}>
+                    {type}
+                  </option>
+                ))}
+              </select>
+            </div>
+            )}
+              <div>
                 <label className="block text-sm font-medium text-gray-700">Size</label>
                 <select
                   name="size"
                   value={formData.size}
-                  onChange={handleChange}
+                  onChange={handleVariantChanges}
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#543310] focus:ring focus:ring-[#543310] focus:ring-opacity-50"
                   required
                 >
                   <option value="">Select a size</option>
-                  {/* Replace this with dynamic size options if necessary */}
-                  <option value="S">Small</option>
-                  <option value="M">Medium</option>
-                  <option value="L">Large</option>
+                  {sizeTypes[variatdata.productType].map((size) => (
+                    <option key={size} value={size}>
+                      {size}
+                    </option>
+                  ))}
                 </select>
               </div>
-            )}
+            </div>
+            <div>
+           
 
             {/* Price and Stock */}
             <div className="grid grid-cols-2 gap-6">
