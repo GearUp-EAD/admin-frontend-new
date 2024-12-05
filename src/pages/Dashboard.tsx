@@ -2,12 +2,63 @@ import React from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import PopularProducts from '../components/PopularProducts';
 import { useStats } from '../hooks/useStats';
-import { useCustomers } from '../hooks/useCustomers';
+import { useState, useEffect } from 'react';
 import { DollarSign, TrendingUp } from 'lucide-react';
 
+
+interface Customer {
+  customerID: string;
+  name: string;
+  email: string;
+  address: string;
+  phoneNumber: number;
+  imageUrl: string;
+}
 const Dashboard = () => {
-  const { stats, data: chartData } = useStats();
-  const { recentCustomers } = useCustomers();
+  const [chartData, setChartData] = useState([]);
+  const [recentCustomers, setRecentCustomers] = useState<Customer[]>([]);
+  const [totalIncome, setTotalIncome] = useState(0);
+
+  const fetchChartData = async () => {
+    fetch("http://localhost:8080/api/payments/paymentSummary")
+    .then((response) => response.json())
+    .then((data) => {
+      const formattedData = data.map((item) => ({
+        name: new Date(0, item.month - 1).toLocaleString("default", { month: "long" }),
+        value: item.totalAmount,
+      }));
+      setChartData(formattedData);
+    })
+    .catch((error) => console.error("Error fetching payment summary:", error));
+  }
+
+  const fetchTotalIncome = async () => {
+    try {
+      const response = await fetch('http://localhost:8080/api/payments/total');
+      const data = await response.json();
+      setTotalIncome(data || 0);
+
+    } catch (error) {
+      console.error('Error fetching total income:', error);
+    }
+  };
+
+  const fetchFirstFiveCustomers = async () => {
+    try {
+      const response = await fetch('http://localhost:8080/api/customers/first-five');
+      const data = await response.json();
+      setRecentCustomers(data || []);
+    } catch (error) {
+      console.error('Error fetching first five customers:', error);
+    }
+  }
+
+  useEffect(() => {
+    fetchChartData();
+    fetchFirstFiveCustomers ();
+    fetchTotalIncome();
+  }, []);
+
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
@@ -22,8 +73,8 @@ const Dashboard = () => {
             </div>
             <div className="ml-4">
               <p className="text-sm text-gray-500">Total Income</p>
-              <p className="text-2xl font-semibold">${stats.income}</p>
-            </div>
+              <p className="text-2xl font-semibold">${totalIncome.toLocaleString()}</p>
+              </div>
           </div>
         </div>
         <div className="bg-white p-6 rounded-xl shadow-sm">
@@ -46,7 +97,7 @@ const Dashboard = () => {
           {recentCustomers.map((customer) => (
             <div key={customer.name} className="text-center flex-shrink-0">
               <img
-                src={customer.image}
+                src={customer.imageUrl}
                 alt={customer.name}
                 className="w-16 h-16 rounded-full mb-2"
               />
@@ -57,14 +108,14 @@ const Dashboard = () => {
       </div>
 
       {/* Popular Products */}
-      <div className="mb-8">
+      {/* <div className="mb-8">
         <div className="bg-white p-6 rounded-xl shadow-sm">
           <h3 className="text-lg font-semibold mb-4">Popular Products</h3>
           <div className="space-y-4">
             <PopularProducts />
           </div>
         </div>
-      </div>
+      </div> */}
 
       {/* Total Income Chart */}
       <div className="bg-white p-6 rounded-xl shadow-sm">
@@ -77,19 +128,19 @@ const Dashboard = () => {
           </select>
         </div>
         <div className="h-[300px] w-full">
-          <LineChart width={800} height={300} data={chartData}>
-            <CartesianGrid strokeDasharray="3 3" vertical={false} />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
-            <Line
-              type="monotone"
-              dataKey="value"
-              stroke="#8B4513"
-              strokeWidth={2}
-              dot={{ fill: '#8B4513' }}
-            />
-          </LineChart>
+        <LineChart width={800} height={300} data={chartData}>
+      <CartesianGrid strokeDasharray="3 3" vertical={false} />
+      <XAxis dataKey="name" />
+      <YAxis />
+      <Tooltip />
+      <Line
+        type="monotone"
+        dataKey="value"
+        stroke="#8B4513"
+        strokeWidth={2}
+        dot={{ fill: "#8B4513" }}
+      />
+    </LineChart>
         </div>
       </div>
     </div>
