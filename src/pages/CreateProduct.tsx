@@ -16,53 +16,53 @@ const categories = {
   Accessories: {
     id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
     subcategories: {
-      'Caps and Hats': 'size-id-1',
-      Gloves: 'size-id-2',
-      'Head and Wrist Bands': 'size-id-3',
-      Socks: 'size-id-4',
-      Sunglasses: 'size-id-5',
+      'Caps and Hats': '00000000-0000-0000-0000-000000000001',
+      Gloves: '00000000-0000-0000-0000-000000000002',
+      'Head and Wrist Bands': '00000000-0000-0000-0000-000000000003',
+      Socks: '00000000-0000-0000-0000-000000000004',
+      Sunglasses: '00000000-0000-0000-0000-000000000005',
     },
     sizeType: ['One Size'],
   },
   Apparels: {
     id: '4fa85f64-5717-4562-b3fc-2c963f66afa7',
     subcategories: {
-      'Compression Wear': 'size-id-6',
-      'Jackets & Hoodies': 'size-id-7',
-      Shorts: 'size-id-8',
-      Swimwear: 'size-id-9',
-      'T-shirts & Jerseys': 'size-id-10',
+      'Compression Wear': '00000000-0000-0000-0000-000000000006',
+      'Jackets & Hoodies': '00000000-0000-0000-0000-000000000007',
+      Shorts: '00000000-0000-0000-0000-000000000008',
+      Swimwear: '00000000-0000-0000-0000-000000000009',
+      'T-shirts & Jerseys': '00000000-0000-0000-0000-000000000010',
     },
     sizeType: ['S', 'M', 'L', 'XL', 'XXL'],
   },
   Equipments: {
     id: '5fa85f64-5717-4562-b3fc-2c963f66afa8',
     subcategories: {
-      Balls: 'size-id-11',
-      'Bags and Bottles': 'size-id-12',
-      'Fitness and Gym': 'size-id-13',
-      'Rackets and Bats': 'size-id-14',
-      'Protective Gear': 'size-id-15',
+      Balls: '00000000-0000-0000-0000-000000000011',
+      'Bags and Bottles': '00000000-0000-0000-0000-000000000012',
+      'Fitness and Gym': '00000000-0000-0000-0000-000000000013',
+      'Rackets and Bats': '00000000-0000-0000-0000-000000000014',
+      'Protective Gear': '00000000-0000-0000-0000-000000000015',
     },
     sizeType: ['One Size', 'Custom'],
   },
   Footwear: {
     id: '6fa85f64-5717-4562-b3fc-2c963f66afa9',
     subcategories: {
-      Cleats: 'size-id-16',
-      'Hiking Boots': 'size-id-17',
-      'Running Shoes': 'size-id-18',
-      'Sandals & Slippers': 'size-id-19',
-      Sneakers: 'size-id-20',
+      Cleats: '00000000-0000-0000-0000-000000000016',
+      'Hiking Boots': '00000000-0000-0000-0000-000000000017',
+      'Running Shoes': '00000000-0000-0000-0000-000000000018',
+      'Sandals & Slippers': '00000000-0000-0000-0000-000000000019',
+      Sneakers: '00000000-0000-0000-0000-000000000020',
     },
     sizeType: ['6', '7', '8', '9', '10', '11', '12'],
   },
   'Nutrition & Health': {
     id: '7fa85f64-5717-4562-b3fc-2c963f66afaa',
     subcategories: {
-      'Energy Bars & Drinks': 'size-id-21',
-      'Protein Powders': 'size-id-22',
-      Supplements: 'size-id-23',
+      'Energy Bars & Drinks': '00000000-0000-0000-0000-000000000021',
+      'Protein Powders': '00000000-0000-0000-0000-000000000022',
+      Supplements: '00000000-0000-0000-0000-000000000023',
     },
     sizeType: ['One Size'],
   },
@@ -84,8 +84,8 @@ const CreateProduct = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    const productData = {
+  
+    const productData = [{
       name: formData.name,
       description: formData.description,
       basePrice: parseFloat(formData.price),
@@ -93,12 +93,13 @@ const CreateProduct = () => {
       imageUrl: formData.image,
       variants: formData.sizes.map((item) => ({
         sizeId: categories[formData.category].subcategories[formData.subcategory],
-        size: item.size,
         stockQuantity: parseInt(item.quantity),
-        priceAdjustment: 0,
-      })),
-    };
-
+        priceAdjustment: 0
+      }))
+    }];
+  
+    console.log('Sending product data:', JSON.stringify(productData, null, 2));
+  
     try {
       const response = await fetch('http://localhost:8080/api/products', {
         method: 'POST',
@@ -107,13 +108,17 @@ const CreateProduct = () => {
         },
         body: JSON.stringify(productData),
       });
-
-      if (response.ok) {
-        navigate('/products');
-      } else {
-        throw new Error('Failed to create product');
+  
+      if (!response.ok) {
+        // Get the error details
+        const errorDetails = await response.text();
+        console.error('Error details:', errorDetails);
+        throw new Error(`Failed to create product: ${errorDetails}`);
       }
+  
+      navigate('/products');
     } catch (error: any) {
+      console.error('Submission error:', error);
       setError(error.message);
     }
   };
