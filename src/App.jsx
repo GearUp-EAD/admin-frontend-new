@@ -25,8 +25,9 @@ function App() {
     <KeycloakProvider>
       <BrowserRouter>
         <Routes>
+        <Route path="/public" element={<PublicPage />} />
+
           <Route path="/" element={<Layout />}>
-          <Route path="public" element={<PublicPage />} /> {/* Public route */}
           <Route element={<ProtectedRoutes />}>
               <Route index element={<Dashboard />} />
               <Route path="products" element={<Products />} />
