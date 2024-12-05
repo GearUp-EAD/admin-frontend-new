@@ -23,6 +23,7 @@ const Customers = () => {
         const response = await fetch('http://localhost:8080/api/customers');
         const data = await response.json();
         setCustomers(data);
+        console.log("this is image URL", data[0]?.imageUrl);
         setLoading(false);
       } catch (err) {
         setError(err.message);
@@ -30,7 +31,10 @@ const Customers = () => {
       }
     };
   
-
+    fetchCustomers();
+  }, []); // Fetch customers only once when the component mounts.
+  
+  useEffect(() => {
     const getOrderCounts = async () => {
       const counts: { [key: string]: number } = {};
       for (const customer of customers) {
@@ -38,7 +42,7 @@ const Customers = () => {
       }
       setOrderCounts(counts);
     };
-
+  
     const getTotalAmounts = async () => {
       const amounts: { [key: string]: number } = {};
       for (const customer of customers) {
@@ -48,15 +52,11 @@ const Customers = () => {
     };
   
     if (customers.length > 0) {
+      getOrderCounts();
       getTotalAmounts();
     }
+  }, [customers]); // Fetch order counts and amounts only when `customers` is updated.
   
-    if (customers.length > 0) {
-      getOrderCounts();
-    }
-
-    fetchCustomers();
-  }, [customers]);
 
   const fetchOrderCount = async (customerId: string) => {
     try {
