@@ -1,12 +1,20 @@
-import React from 'react';
+// PublicPage.tsx
+import React, { useEffect } from 'react';
+import { getIdToken } from '../context/ProtectedRoutes';
 
 const PublicPage = () => {
-    return (
-        <div>
-            <h1>Welcome to the Public Page</h1>
-            <p>This is a public page accessible to everyone.</p>
-        </div>
-    );
+  useEffect(() => {
+    // Move token logging inside useEffect to run after mounting
+    const token = getIdToken();
+    console.log('get id token', token);
+  }, []); // Empty dependency array ensures it runs once
+
+  return (
+    <div>
+      <h1>Public Page</h1>
+      {/* Rest of your component */}
+    </div>
+  );
 };
 
 export default PublicPage;

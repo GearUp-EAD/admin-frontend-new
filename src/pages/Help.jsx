@@ -1,7 +1,13 @@
-import React from 'react';
+import React  from 'react';
+import { useEffect } from 'react';
 import { Mail, Phone, MessageCircle, FileText, Book, Video } from 'lucide-react';
 
+
 const Help = () => {
+
+ 
+
+  
   const helpCategories = [
     {
       icon: <Book className="w-8 h-8 text-[#543310]" />,
