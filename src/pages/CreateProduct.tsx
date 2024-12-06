@@ -37,19 +37,19 @@ const CreateProduct = () => {
     priceAdjustment: 0
   });
 
-  const [categories, setCategories] = useState<string[]>([]);
+  const [categories, setCategories] = useState<{ id: string; name: string }[]>([]);
 
 
   const fetchCategories = async () => {
     try {
       const response = await fetch('http://localhost:8080/api/categories/parents');
       const data = await response.json();
-      setCategories(data);
-      console.log(data);
+      setCategories(data.map((category: any) => ({ id: category.categoryID, name: category.categoryName })));
     } catch (error) {
       console.error('Error fetching categories:', error);
     }
   };
+  
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -113,16 +113,26 @@ const CreateProduct = () => {
           </div>
 
           <div>
-            <label className="block mb-2">Category</label>
-            <input
-              type="text"
-              name="category"
-              value={formData.category}
-              onChange={handleInputChange}
-              className="w-full p-2 border rounded"
-              required
-            />
-          </div>
+  <label className="block mb-2">Category</label>
+  <select
+    name="category"
+    value={formData.category}
+    onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+    className="w-full p-2 border rounded"
+    required
+  >
+    <option value="" disabled>
+      Select a category
+    </option>
+    {categories.map((category) => (
+      <option key={category.id} value={category.name}>
+        {category.name}
+      </option>
+    ))}
+  </select>
+</div>
+
+
 
           <div>
             <label className="block mb-2">Subcategory</label>
