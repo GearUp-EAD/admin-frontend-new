@@ -38,6 +38,8 @@ const CreateProduct = () => {
   });
 
   const [categories, setCategories] = useState<{ id: string; name: string }[]>([]);
+  const [subcategories, setSubcategories] = useState<{ id: string; name: string }[]>([]);
+
 
 
   const fetchCategories = async () => {
@@ -49,6 +51,16 @@ const CreateProduct = () => {
       console.error('Error fetching categories:', error);
     }
   };
+  const fetchSubcategories = async (parentCategoryId: string) => {
+    try {
+      const response = await fetch(`http://localhost:8080/api/categories/${parentCategoryId}/subcategories`);
+      const data = await response.json();
+      setSubcategories(data.map((subcategory: any) => ({ id: subcategory.categoryID, name: subcategory.categoryName })));
+    } catch (error) {
+      console.error('Error fetching subcategories:', error);
+    }
+  };
+  
   
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -117,7 +129,11 @@ const CreateProduct = () => {
   <select
     name="category"
     value={formData.category}
-    onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+    onChange={(e) => {
+      const selectedCategoryId = e.target.value;
+      setFormData({ ...formData, category: selectedCategoryId, subcategory: '' });
+      fetchSubcategories(selectedCategoryId); // Fetch subcategories
+    }}
     className="w-full p-2 border rounded"
     required
   >
@@ -125,26 +141,33 @@ const CreateProduct = () => {
       Select a category
     </option>
     {categories.map((category) => (
-      <option key={category.id} value={category.name}>
+      <option key={category.id} value={category.id}>
         {category.name}
       </option>
     ))}
   </select>
 </div>
 
-
-
-          <div>
-            <label className="block mb-2">Subcategory</label>
-            <input
-              type="text"
-              name="subcategory"
-              value={formData.subcategory}
-              onChange={handleInputChange}
-              className="w-full p-2 border rounded"
-              required
-            />
-          </div>
+<div>
+  <label className="block mb-2">Subcategory</label>
+  <select
+    name="subcategory"
+    value={formData.subcategory}
+    onChange={(e) => setFormData({ ...formData, subcategory: e.target.value })}
+    className="w-full p-2 border rounded"
+    required
+    disabled={!subcategories.length}
+  >
+    <option value="" disabled>
+      Select a subcategory
+    </option>
+    {subcategories.map((subcategory) => (
+      <option key={subcategory.id} value={subcategory.name}>
+        {subcategory.name}
+      </option>
+    ))}
+  </select>
+</div>
 
           <div>
             <label className="block mb-2">Price</label>
