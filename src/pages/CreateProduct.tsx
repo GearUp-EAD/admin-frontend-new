@@ -39,6 +39,7 @@ const CreateProduct = () => {
 
   const [categories, setCategories] = useState<{ id: string; name: string }[]>([]);
   const [subcategories, setSubcategories] = useState<{ id: string; name: string }[]>([]);
+  const [sizeTypes, setSizeTypes] = useState<{ sizeTypeId: string; name: string }[]>([]);
 
 
 
@@ -58,6 +59,15 @@ const CreateProduct = () => {
       setSubcategories(data.map((subcategory: any) => ({ id: subcategory.categoryID, name: subcategory.categoryName })));
     } catch (error) {
       console.error('Error fetching subcategories:', error);
+    }
+  };
+  const fetchSizeTypes = async () => {
+    try {
+      const response = await fetch('http://localhost:8080/api/sizes/type');
+      const data = await response.json();
+      setSizeTypes(data);
+    } catch (error) {
+      console.error('Error fetching size types:', error);
     }
   };
   
@@ -91,7 +101,7 @@ const CreateProduct = () => {
     e.preventDefault();
     try {
       // Add your API call here
-      navigate('/products');
+      navigate('http://localhost:8080/api/products');
     } catch (error) {
       console.error('Error creating product:', error);
     }
@@ -100,6 +110,7 @@ const CreateProduct = () => {
   useEffect(() => {
 
     fetchCategories();
+    fetchSizeTypes();
   }, []);
 
 
@@ -193,7 +204,23 @@ const CreateProduct = () => {
             required
           />
         </div>
-
+        <div>
+  <label className="block mb-2">Size Type</label>
+  <select
+    name="sizeType"
+    className="w-full p-2 border rounded"
+    required
+  >
+    <option value="" disabled>
+      Select a size type
+    </option>
+    {sizeTypes.map((type) => (
+      <option key={type.sizeTypeId} value={type.sizeTypeId}>
+        {type.name}
+      </option>
+    ))}
+  </select>
+</div>
         {/* Size Management Section */}
         <div className="border p-4 rounded">
           <h3 className="font-bold mb-4">Add Sizes</h3>
