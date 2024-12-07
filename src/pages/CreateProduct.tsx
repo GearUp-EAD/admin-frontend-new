@@ -24,6 +24,22 @@ interface Sizes {
   value: number;
 }
 
+interface ApiPayload {
+  productId: string;
+  name: string;
+  description: string;
+  basePrice: number;
+  categoryName: string;
+  imageUrl: string;
+  variants: Variants[];
+}
+
+interface Variants {
+  variantId: string;
+  quantity: number;
+  priceAdjustment: number;
+}
+
 const CreateProduct = () => {
   const navigate = useNavigate();
   // const sizeOptions = ["XS", "S", "M", "L", "XL", "2XL", "3XL"];
