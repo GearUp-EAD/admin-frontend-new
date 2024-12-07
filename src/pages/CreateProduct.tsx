@@ -13,30 +13,29 @@ interface ProductForm {
 }
 
 interface Size {
-  size: string;
+  size: string; // Ensure this is a string matching the 'value' from Sizes
   quantity: number;
   priceAdjustment: number;
 }
 
 interface Sizes {
   sizeId: string;
+  value: string; // Changed from number to string
   sizeTypeId: string;
-  value: number;
 }
 
 interface ApiPayload {
-  productId: string;
   name: string;
   description: string;
   basePrice: number;
-  categoryName: string;
+  categoryId: string;
   imageUrl: string;
   variants: Variants[];
 }
 
 interface Variants {
-  variantId: string;
-  quantity: number;
+  sizeId: string;
+  stockQuantity: number;
   priceAdjustment: number;
 }
 
@@ -56,6 +55,16 @@ const CreateProduct = () => {
     image: "",
     sizes: [],
   });
+
+  const [apiPayload, setApiPayload] = useState<ApiPayload>({
+    name: "",
+    description: "",
+    basePrice: 0,
+    categoryId: "",
+    imageUrl: "",
+    variants: [],
+  });
+
   const [categories, setCategories] = useState<{ id: string; name: string }[]>(
     []
   );
@@ -78,8 +87,6 @@ const CreateProduct = () => {
       );
       const data = await response.json();
       setSizeOptions(data);
-
-      // setSizes(data);
     } catch (error) {
       console.error("Error fetching sizes:", error);
     }
@@ -87,7 +94,14 @@ const CreateProduct = () => {
 
   const handleAddSize = () => {
     if (newSize.size) {
-      setSizes([...sizes, newSize]);
+      setSizes([
+        ...sizes,
+        {
+          size: newSize.size, // This should be the string value like "Large"
+          quantity: newSize.quantity,
+          priceAdjustment: newSize.priceAdjustment,
+        },
+      ]);
       setNewSize({ size: "", quantity: 0, priceAdjustment: 0 });
     }
   };
@@ -146,6 +160,11 @@ const CreateProduct = () => {
       ...prev,
       [name]: value,
     }));
+    setApiPayload((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+    console.log("api Payload", apiPayload);
   };
 
   const handleSizeInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -159,10 +178,90 @@ const CreateProduct = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      console.log("Creating product:", formData);
+    // Map form data and sizes to API payload
+    const payload = mapProductFormToApiPayload(
+      formData, 
+      sizes, 
+      sizeOptions, 
+      subcategories
+    );    console.log("payload", payload);
+
+    // Send payload to API
+      const response = await fetch('http://localhost:8080/api/products', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify([payload])
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to create product');
+      }
+
+      const result = await response.json();
+      console.log('Product created:', result);
+      navigate('/products'); // Redirect after successful creation
     } catch (error) {
-      console.error("Error creating product:", error);
+      console.error('Error creating product:', error);
     }
+  };
+
+  const mapProductFormToApiPayload = (
+    formData: ProductForm,
+    sizes: Size[],
+    sizeOptions: Sizes[],
+    subcategories: { id: string; name: string }[]
+  ): ApiPayload => {
+    // Find the subcategory ID that matches the selected subcategory name
+    const matchingSubcategory = subcategories.find(
+      (subcategory) => subcategory.name === formData.subcategory
+    );
+  
+    if (!matchingSubcategory) {
+      throw new Error(`No matching subcategory found for ${formData.subcategory}`);
+    }
+  
+    const variants = sizes.map((size) => {
+      const matchingSizeOption = sizeOptions.find(
+        (option) => option.value === size.size
+      );
+  
+      if (!matchingSizeOption) {
+        throw new Error(`No matching size found for ${size.size}`);
+      }
+  
+      return {
+        sizeId: matchingSizeOption.sizeId,
+        stockQuantity: size.quantity,
+        priceAdjustment: size.priceAdjustment,
+      };
+    });
+  
+    return {
+      name: formData.name,
+      description: formData.description,
+      basePrice: parseFloat(formData.price),
+      categoryId: matchingSubcategory.id, // Use the subcategory ID
+      imageUrl: formData.image,
+      variants,
+    };
+  };
+  // In your handleSubmit or where you prepare the product creation
+
+  const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedCategoryId = e.target.value;
+    setFormData({
+      ...formData,
+      category: selectedCategoryId,
+      subcategory: "",
+    });
+    fetchSubcategories(selectedCategoryId); // Fetch subcategories
+    console.log("api payload :", apiPayload);
+  };
+
+  const handleSubcategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setFormData({ ...formData, subcategory: e.target.value });
   };
 
   useEffect(() => {
@@ -196,15 +295,7 @@ const CreateProduct = () => {
             <select
               name="category"
               value={formData.category}
-              onChange={(e) => {
-                const selectedCategoryId = e.target.value;
-                setFormData({
-                  ...formData,
-                  category: selectedCategoryId,
-                  subcategory: "",
-                });
-                fetchSubcategories(selectedCategoryId); // Fetch subcategories
-              }}
+              onChange={handleCategoryChange}
               className="w-full p-2 border rounded"
               required
             >
@@ -224,9 +315,7 @@ const CreateProduct = () => {
             <select
               name="subcategory"
               value={formData.subcategory}
-              onChange={(e) =>
-                setFormData({ ...formData, subcategory: e.target.value })
-              }
+              onChange={handleSubcategoryChange}
               className="w-full p-2 border rounded"
               required
               disabled={!subcategories.length}
@@ -315,7 +404,7 @@ const CreateProduct = () => {
               type="number"
               placeholder="Price Adjustment"
               className="p-2 border rounded"
-              value={newSize.priceAdjustment|| ""} // Convert 0 to empty string
+              value={newSize.priceAdjustment || ""} // Convert 0 to empty string
               onChange={(e) =>
                 setNewSize({
                   ...newSize,
@@ -360,52 +449,3 @@ const CreateProduct = () => {
 };
 
 export default CreateProduct;
-
-{
-  /* <div className="border p-4 rounded">
-          <h3 className="font-bold mb-4">Add Sizes</h3>
-          <div className="grid grid-cols-3 gap-4 mb-4">
-            <input
-              type="text"
-              name="size"
-              value={newSize.size}
-              onChange={handleSizeInputChange}
-              placeholder="Size"
-              className="p-2 border rounded"
-            />
-            <input
-              type="number"
-              name="quantity"
-              value={newSize.quantity}
-              onChange={handleSizeInputChange}
-              placeholder="Quantity"
-              className="p-2 border rounded"
-            />
-            <input
-              type="number"
-              name="priceAdjustment"
-              value={newSize.priceAdjustment}
-              onChange={handleSizeInputChange}
-              placeholder="Price Adjustment"
-              className="p-2 border rounded"
-            />
-          </div>
-          <button
-            type="button"
-            onClick={handleAddSize}
-            className="bg-blue-500 text-white px-4 py-2 rounded"
-          >
-            Add Size
-          </button>
-
-          {/* Display added sizes */
-}
-//   <div className="mt-4">
-//     {formData.sizes.map((size, index) => (
-//       <div key={index} className="bg-gray-100 p-2 mb-2 rounded">
-//         Size: {size.size}, Quantity: {size.quantity}, Adjustment: $
-//         {size.priceAdjustment}
-//       </div>
-//     ))}
-//   </div>
-// </div>
