@@ -1,6 +1,8 @@
 import React from 'react';
+import { useState, useEffect } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { DollarSign, TrendingUp, CreditCard, Wallet } from 'lucide-react';
+
 
 const monthlyData = [
   { month: 'Jan', income: 30000 },
@@ -11,34 +13,138 @@ const monthlyData = [
   { month: 'Jun', income: 39000 },
 ];
 
-const transactions = [
-  {
-    id: 1,
-    customer: 'Johnson D.',
-    date: '2024-02-20',
-    amount: 299.99,
-    method: 'Credit Card',
-    image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop',
-  },
-  {
-    id: 2,
-    customer: 'Dianne I.',
-    date: '2024-02-19',
-    amount: 199.50,
-    method: 'PayPal',
-    image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop',
-  },
-  {
-    id: 3,
-    customer: 'Penny L.',
-    date: '2024-02-18',
-    amount: 499.99,
-    method: 'Credit Card',
-    image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop',
-  },
-];
+interface Transaction {
+  id: number;
+  customer: string;
+  image: string;
+  date: string;
+  amount: number;
+  method: string;
+}
+
+interface InputData {
+  0: string; 
+  1: string; 
+  2: string; 
+  3: number;  
+  4: string; 
+}
+
+interface GrowthData {
+  date: string;
+  growth: number | null;
+}
 
 const Income = () => {
+  const [totalIncome, setTotalIncome] = useState(0);
+  const [chartData, setChartData] = useState([]);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [monthlyGrowth, setMonthlyGrowth] = useState<string>('0');
+  const [growthColor, setGrowthColor] = useState<string>('text-gray-600');
+  const [avgOrderValue, setAvgOrderValue] = useState<number>(0);
+
+
+
+  const calculateAvgOderValue = async () => {
+    try {
+      const response = await fetch('http://localhost:8080/api/orders');
+      const data = await response.json();
+      const oderCount = data.length;
+      const response1 = await fetch('http://localhost:8080/api/payments/total');
+      const data1 = await response1.json();
+      const totalIncome = data1;
+      try {
+      setAvgOrderValue(totalIncome/oderCount);
+      }
+      catch (error) {
+        setAvgOrderValue(0);
+      }
+    }
+    catch (error) {
+      console.error('Error fetching total income:', error);
+    }
+  }
+
+
+  const fetchChartData = async () => {
+    fetch("http://localhost:8080/api/payments/paymentSummary")
+    .then((response) => response.json())
+    .then((data) => {
+      const formattedData = data.map((item) => ({
+        name: new Date(0, item.month - 1).toLocaleString("default", { month: "long" }),
+        value: item.totalAmount,
+      }));
+      setChartData(formattedData);
+    })
+    .catch((error) => console.error("Error fetching payment summary:", error));
+  }
+
+  const fetchTotalIncome = async () => {
+    try {
+      const response = await fetch('http://localhost:8080/api/payments/total');
+      const data = await response.json();
+      setTotalIncome(data || 0);
+
+    } catch (error) {
+      console.error('Error fetching total income:', error);
+    }
+  };
+
+  const fetchTransactions = async () => {
+    try {
+      const response = await fetch('http://localhost:8080/api/payments/latestFiveTransactions');
+      const data = await response.json();
+
+      const transactions: Transaction[] = data.map((item: InputData, index: number) => ({
+        id: index + 1,
+        customer: item[0],
+        image: item[1],
+        date: item[2],
+        amount: item[3],
+        method: item[4]
+      }));
+
+      setTransactions(transactions || []);
+    } catch (error) {
+      console.error('Error fetching recent transactions:', error);
+    }
+  }
+  const fetchGrowthData = async (): Promise<GrowthData[]> => {
+    const response = await fetch('http://localhost:8080/api/payments/MonthlyPaymentGrowth');
+    const data: [string, number | null][] = await response.json();
+    
+    return data.map(([date, growth]) => ({
+      date,
+      growth
+    }));
+  };
+
+  const getGrowthData = async () => {
+    try {
+      const growthData = await fetchGrowthData();
+      // Get last non-null growth value
+      const lastGrowth = [...growthData]
+        .reverse()
+        .find(item => item.growth !== null);
+      
+      if (lastGrowth && lastGrowth.growth !== null) {
+        const growthValue = lastGrowth.growth;
+        setMonthlyGrowth(`${growthValue > 0 ? '+' : ''}${growthValue.toFixed(2)}%`);
+        setGrowthColor(growthValue > 0 ? 'text-green-600' : 'text-red-600');
+      }
+    } catch (error) {
+      console.error('Error fetching growth data:', error);
+      setMonthlyGrowth('N/A');
+    }
+  };
+
+  useEffect(() => {
+    calculateAvgOderValue();
+    getGrowthData();
+    fetchTransactions();
+    fetchTotalIncome();
+    fetchChartData();
+  }, []);
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
@@ -58,7 +164,7 @@ const Income = () => {
             </div>
             <div className="ml-4">
               <p className="text-sm text-gray-500">Total Income</p>
-              <p className="text-2xl font-semibold">$207,450</p>
+              <p className="text-2xl font-semibold">${totalIncome.toLocaleString()}</p>
             </div>
           </div>
         </div>
@@ -69,7 +175,9 @@ const Income = () => {
             </div>
             <div className="ml-4">
               <p className="text-sm text-gray-500">Monthly Growth</p>
-              <p className="text-2xl font-semibold">+8.5%</p>
+              <p className={`text-2xl font-semibold ${growthColor}`}>
+              {monthlyGrowth}
+              </p>
             </div>
           </div>
         </div>
@@ -80,7 +188,7 @@ const Income = () => {
             </div>
             <div className="ml-4">
               <p className="text-sm text-gray-500">Avg. Order Value</p>
-              <p className="text-2xl font-semibold">$245</p>
+              <p className="text-2xl font-semibold">${avgOrderValue.toFixed()}</p>
             </div>
           </div>
         </div>
@@ -91,14 +199,14 @@ const Income = () => {
           <h3 className="text-lg font-semibold mb-4">Income Overview</h3>
           <div className="h-80">
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={monthlyData}>
+              <LineChart data={chartData}>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                <XAxis dataKey="month" />
+                <XAxis dataKey="name" />
                 <YAxis />
                 <Tooltip />
                 <Line
                   type="monotone"
-                  dataKey="income"
+                  dataKey="value"
                   stroke="#543310"
                   strokeWidth={2}
                   dot={{ fill: '#543310' }}

@@ -79,6 +79,20 @@ const Orders = () => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  const fetchShippingDetails = async () => {
+    try {
+      const response = await fetch("http://localhost:8080/api/shippings");
+      if (!response.ok) {
+        throw new Error("Failed to fetch shipping details");
+      }
+      const data = await response.json();
+      calculateOrderCounts(data);
+    } catch (err) {
+      setError(err.message);
+      console.error("Error fetching shipping details:", err);
+    }
+  };
   // Fetch orders once when the component mounts
   useEffect(() => {
     const fetchOrders = async () => {
@@ -94,20 +108,6 @@ const Orders = () => {
         console.error("Error fetching orders:", err);
       } finally {
         setLoading(false);
-      }
-    };
-
-    const fetchShippingDetails = async () => {
-      try {
-        const response = await fetch("http://localhost:8080/api/shippings");
-        if (!response.ok) {
-          throw new Error("Failed to fetch shipping details");
-        }
-        const data = await response.json();
-        calculateOrderCounts(data);
-      } catch (err) {
-        setError(err.message);
-        console.error("Error fetching shipping details:", err);
       }
     };
 
@@ -140,7 +140,7 @@ const Orders = () => {
     const loadShippingDetails = async () => {
       const details: { [key: string]: Shipping } = {};
       for (const order of orders) {
-        const shipping = await fetchShippingDetails(order.orderID);
+        const shipping = await fetchShippingDetail(order.orderID);
         if (shipping) {
           details[order.orderID] = shipping;
         }
@@ -163,7 +163,7 @@ const Orders = () => {
     }
   };
 
-  const fetchShippingDetails = async (orderId: string) => {
+  const fetchShippingDetail = async (orderId: string) => {
     try {
       const response = await fetch(
         `http://localhost:8080/api/shippings/order/${orderId}`
@@ -200,6 +200,19 @@ const Orders = () => {
   };
 
   const handleUpdateStatus = async (orderId: string, status: string) => {
+    // Get current status for comparison
+    const currentStatus = shippingDetail[orderId]?.shippingStatus || 'PENDING';
+    
+    // Show confirmation dialog
+    const confirmed = window.confirm(
+      `Are you sure you want to change the status from ${currentStatus} to ${status}?`
+    );
+
+    if (!confirmed) {
+      setDropdownOpen(null); // Close dropdown if cancelled
+      return;
+    }
+
     try {
       const response = await fetch(
         `http://localhost:8080/api/shippings/order/${orderId}`,
@@ -212,8 +225,6 @@ const Orders = () => {
         }
       );
 
-      
-
       if (!response.ok) {
         throw new Error("Failed to update shipping status");
       }
@@ -225,15 +236,14 @@ const Orders = () => {
         shippingStatus: status,
       };
       setShippingDetail(updatedShippingDetail);
-      alert("Shipping status updated successfully!");
-
+      fetchShippingDetails();
     } catch (error) {
       console.error("Error updating shipping status:", error);
       alert("Failed to update shipping status.");
     } finally {
-      setDropdownOpen(null); // Close the dropdown after update
+      setDropdownOpen(null);
     }
-  };
+};
 
   return (
     <div>
@@ -310,7 +320,7 @@ const Orders = () => {
               </div>
             </div>
 
-            <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+<div className="bg-white rounded-xl shadow-sm">
               <div className="overflow-x-auto">
                 <table className="min-w-full divide-y divide-gray-200">
                   <thead className="bg-gray-50">
@@ -388,22 +398,25 @@ const Orders = () => {
                           {shippingDetail[order.orderID]?.shippingAddress ||
                             "No address"}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium relative">
                           <div className="relative">
                             <button
-                              className="text-[#543310] hover:text-[#A0522D] focus:outline-none"
+                              className="inline-flex items-center px-3 py-2 border border-[#543310] rounded-md
+                                          bg-white text-[#543310] hover:bg-[#543310] hover:text-white
+                                          transition-colors duration-200 ease-in-out
+                                          focus:outline-none focus:ring-2 focus:ring-[#543310] focus:ring-opacity-50"
                               onClick={() => setDropdownOpen(order.orderID)}
                             >
                               Update Status
                             </button>
                             {dropdownOpen === order.orderID && (
-                              <div className="absolute z-10 mt-2 w-40 bg-white rounded-md shadow-lg">
-                                <ul className="py-1">
+                              <div className="absolute right-0 z-50 mt-2 w-48 bg-white rounded-md shadow-lg border border-gray-200 overflow-hidden">
+                                <ul className="divide-y divide-gray-100">
                                   {["PROCESSING", "SHIPPED", "DELIVERED"].map(
                                     (status) => (
                                       <li key={status}>
                                         <button
-                                          className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
+                                          className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-[#543310] hover:text-white transition-colors duration-150 ease-in-out"
                                           onClick={() =>
                                             handleUpdateStatus(
                                               order.orderID,

@@ -15,13 +15,43 @@ export const logout = async () => {
 
     await keycloak.logout();
     
-    setIsAuthenticated(false);
+    // setIsAuthenticated(false);
     
     // Clear any application state/storage if needed
     localStorage.removeItem('user-settings'); // Example
   } catch (error) {
     console.error('Logout failed:', error);
     // Handle logout failure - show user feedback
+  }
+};
+
+// Login function
+export const login = async () => {
+  try {
+    // Initialize Keycloak
+    await keycloak.init({
+      onLoad: 'login-required',
+      checkLoginIframe: false,
+    });
+
+    // If authentication successful
+    if (keycloak.authenticated) {
+      console.log('User authenticated');
+      // setIsAuthenticated(true);
+      
+      // Store tokens if needed
+      localStorage.setItem('access-token', keycloak.token);
+      localStorage.setItem('refresh-token', keycloak.refreshToken);
+      
+      return true;
+    } else {
+      console.warn('Authentication failed');
+      return false;
+    }
+
+  } catch (error) {
+    console.error('Login failed:', error);
+    throw error;
   }
 };
 

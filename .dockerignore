@@ -1,0 +1,31 @@
+# Ignore node_modules folder
+node_modules
+
+# Ignore build output (if not using a multi-stage build)
+build
+
+# Ignore logs
+*.log
+logs
+
+# Ignore temporary files and OS-specific files
+*.tmp
+*.swp
+*.swo
+*.DS_Store
+Thumbs.db
+
+# Ignore environment files (if not required for the build)
+.env
+.env.local
+.env.development
+.env.production
+
+# Ignore Git files and directories
+.git
+.gitignore
+
+# Ignore Docker-related files if not needed inside the container
+.dockerignore
+docker-compose.yml
+Dockerfile

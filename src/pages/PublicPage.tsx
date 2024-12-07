@@ -1,6 +1,7 @@
 // PublicPage.tsx
 import React, { useEffect } from 'react';
 import { getIdToken } from '../context/ProtectedRoutes';
+import {login} from '../context/ProtectedRoutes';
 
 const PublicPage = () => {
   useEffect(() => {
@@ -13,6 +14,8 @@ const PublicPage = () => {
     <div>
       <h1>Public Page</h1>
       {/* Rest of your component */}
+
+      <button onClick={login}>Login</button>
     </div>
   );
 };
