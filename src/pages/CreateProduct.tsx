@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Upload } from "lucide-react";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { storage } from "../firebase.js"; // Import the Firebase storage instance
 
 interface ProductForm {
   name: string;
@@ -41,9 +43,12 @@ interface Variants {
 
 const CreateProduct = () => {
   const navigate = useNavigate();
+
+  const [uploading, setUploading] = useState(false);
+  const [productImage, setProductImage] = useState<string | null>(null);
   // const sizeOptions = ["XS", "S", "M", "L", "XL", "2XL", "3XL"];
   const [sizeOptions, setSizeOptions] = useState<Sizes[]>([]);
-
+  const [uploadProgress, setUploadProgress] = useState(0);
   const [selectedSizeType, setSelectedSizeType] = useState<string>("");
   const [sizes, setSizes] = useState<Size[]>([]);
   const [formData, setFormData] = useState<ProductForm>({
@@ -178,32 +183,33 @@ const CreateProduct = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-    // Map form data and sizes to API payload
-    const payload = mapProductFormToApiPayload(
-      formData, 
-      sizes, 
-      sizeOptions, 
-      subcategories
-    );    console.log("payload", payload);
+      // Map form data and sizes to API payload
+      const payload = mapProductFormToApiPayload(
+        formData,
+        sizes,
+        sizeOptions,
+        subcategories
+      );
+      console.log("payload", payload);
 
-    // Send payload to API
-      const response = await fetch('http://localhost:8080/api/products', {
-        method: 'POST',
+      // Send payload to API
+      const response = await fetch("http://localhost:8080/api/products", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify([payload])
+        body: JSON.stringify([payload]),
       });
 
       if (!response.ok) {
-        throw new Error('Failed to create product');
+        throw new Error("Failed to create product");
       }
 
       const result = await response.json();
-      console.log('Product created:', result);
-      navigate('/products'); // Redirect after successful creation
+      console.log("Product created:", result);
+      navigate("/products"); // Redirect after successful creation
     } catch (error) {
-      console.error('Error creating product:', error);
+      console.error("Error creating product:", error);
     }
   };
 
@@ -217,27 +223,29 @@ const CreateProduct = () => {
     const matchingSubcategory = subcategories.find(
       (subcategory) => subcategory.name === formData.subcategory
     );
-  
+
     if (!matchingSubcategory) {
-      throw new Error(`No matching subcategory found for ${formData.subcategory}`);
+      throw new Error(
+        `No matching subcategory found for ${formData.subcategory}`
+      );
     }
-  
+
     const variants = sizes.map((size) => {
       const matchingSizeOption = sizeOptions.find(
         (option) => option.value === size.size
       );
-  
+
       if (!matchingSizeOption) {
         throw new Error(`No matching size found for ${size.size}`);
       }
-  
+
       return {
         sizeId: matchingSizeOption.sizeId,
         stockQuantity: size.quantity,
         priceAdjustment: size.priceAdjustment,
       };
     });
-  
+
     return {
       name: formData.name,
       description: formData.description,
@@ -262,6 +270,38 @@ const CreateProduct = () => {
 
   const handleSubcategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setFormData({ ...formData, subcategory: e.target.value });
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const storageRef = ref(storage, `profile-images/${file.name}`);
+      const uploadTask = uploadBytesResumable(storageRef, file);
+
+      setUploading(true);
+
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          setUploadProgress(progress);
+          console.log(`Upload is ${progress}% done`);
+        },
+        (error) => {
+          console.error("Upload failed:", error);
+          setUploading(false);
+        },
+        async () => {
+          const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+          setProductImage(downloadURL);
+          console.log("File available at", downloadURL);
+          setFormData({ ...formData, image: downloadURL });
+          setUploading(false);
+          setUploadProgress(0);
+        }
+      );
+    }
   };
 
   useEffect(() => {
@@ -342,6 +382,43 @@ const CreateProduct = () => {
               required
             />
           </div>
+        </div>
+
+        <div className="">
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleImageChange}
+            disabled={uploading}
+            className="block w-full text-sm text-gray-500
+          file:mr-4  file:px-4
+          file:rounded-full file:border-0
+          file:text-sm file:font-semibold
+          file:bg-brown-50 file:text-brown-500
+          hover:file:bg-brown-100
+          disabled:opacity-50"
+          />
+          {uploading && (
+            <div className="mt-4 h-5 w-full bg-gray-200 rounded-full overflow-hidden">
+              <div
+                className="h-full bg-blue-500 transition-all duration-300"
+                style={{ width: `${uploadProgress}%` }}
+              >
+                <span className="text-xs text-white px-2">
+                  {uploadProgress.toFixed(0)}%
+                </span>
+              </div>
+            </div>
+          )}
+          {productImage && (
+            <div className="mt-5">
+              <img
+                src={productImage}
+                alt="Uploaded preview"
+                className="max-w-[300px] h-auto rounded-lg shadow-md"
+              />
+            </div>
+          )}
         </div>
 
         <div>
