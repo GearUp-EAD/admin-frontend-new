@@ -30,7 +30,7 @@ const CategorySelector = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch("http://localhost:8080/api/categories/parents");
+      const response = await fetch("http://localhost:33000/api/categories/parents");
       const data = await response.json();
       setCategories(
         data.map((category: any) => ({
@@ -46,7 +46,7 @@ const CategorySelector = () => {
   const fetchSubcategories = async (parentCategoryId: string) => {
     try {
       const response = await fetch(
-        `http://localhost:8080/api/categories/${parentCategoryId}/subcategories`
+        `http://localhost:33000/api/categories/${parentCategoryId}/subcategories`
       );
       const data = await response.json();
       setSubcategories(

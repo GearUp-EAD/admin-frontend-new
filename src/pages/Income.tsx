@@ -47,10 +47,10 @@ const Income = () => {
 
   const calculateAvgOderValue = async () => {
     try {
-      const response = await fetch('http://localhost:8080/api/orders');
+      const response = await fetch('http://localhost:33000/api/orders');
       const data = await response.json();
       const oderCount = data.length;
-      const response1 = await fetch('http://localhost:8080/api/payments/total');
+      const response1 = await fetch('http://localhost:33000/api/payments/total');
       const data1 = await response1.json();
       const totalIncome = data1;
       try {
@@ -67,7 +67,7 @@ const Income = () => {
 
 
   const fetchChartData = async () => {
-    fetch("http://localhost:8080/api/payments/paymentSummary")
+    fetch("http://localhost:33000/api/payments/paymentSummary")
     .then((response) => response.json())
     .then((data) => {
       const formattedData = data.map((item) => ({
@@ -81,7 +81,7 @@ const Income = () => {
 
   const fetchTotalIncome = async () => {
     try {
-      const response = await fetch('http://localhost:8080/api/payments/total');
+      const response = await fetch('http://localhost:33000/api/payments/total');
       const data = await response.json();
       setTotalIncome(data || 0);
 
@@ -92,7 +92,7 @@ const Income = () => {
 
   const fetchTransactions = async () => {
     try {
-      const response = await fetch('http://localhost:8080/api/payments/latestFiveTransactions');
+      const response = await fetch('http://localhost:33000/api/payments/latestFiveTransactions');
       const data = await response.json();
 
       const transactions: Transaction[] = data.map((item: InputData, index: number) => ({
@@ -110,7 +110,7 @@ const Income = () => {
     }
   }
   const fetchGrowthData = async (): Promise<GrowthData[]> => {
-    const response = await fetch('http://localhost:8080/api/payments/MonthlyPaymentGrowth');
+    const response = await fetch('http://localhost:33000/api/payments/MonthlyPaymentGrowth');
     const data: [string, number | null][] = await response.json();
     
     return data.map(([date, growth]) => ({

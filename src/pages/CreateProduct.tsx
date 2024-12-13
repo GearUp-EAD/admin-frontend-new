@@ -87,7 +87,7 @@ const CreateProduct = () => {
   const fetchSizes = async (sizeTypeId: string) => {
     try {
       const response = await fetch(
-        `http://localhost:8080/api/sizes/type/${sizeTypeId}`
+        `http://localhost:33000/api/sizes/type/${sizeTypeId}`
       );
       const data = await response.json();
       setSizeOptions(data);
@@ -119,7 +119,7 @@ const CreateProduct = () => {
   const fetchCategories = async () => {
     try {
       const response = await fetch(
-        "http://localhost:8080/api/categories/parents"
+        "http://localhost:33000/api/categories/parents"
       );
       const data = await response.json();
       setCategories(
@@ -135,7 +135,7 @@ const CreateProduct = () => {
   const fetchSubcategories = async (parentCategoryId: string) => {
     try {
       const response = await fetch(
-        `http://localhost:8080/api/categories/${parentCategoryId}/subcategories`
+        `http://localhost:33000/api/categories/${parentCategoryId}/subcategories`
       );
       const data = await response.json();
       setSubcategories(
@@ -150,7 +150,7 @@ const CreateProduct = () => {
   };
   const fetchSizeTypes = async () => {
     try {
-      const response = await fetch("http://localhost:8080/api/sizes/type");
+      const response = await fetch("http://localhost:33000/api/sizes/type");
       const data = await response.json();
       setSizeTypes(data);
     } catch (error) {
@@ -194,7 +194,7 @@ const CreateProduct = () => {
       console.log("payload", payload);
 
       // Send payload to API
-      const response = await fetch("http://localhost:8080/api/products", {
+      const response = await fetch("http://localhost:33000/api/products", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

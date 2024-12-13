@@ -20,7 +20,7 @@ const Dashboard = () => {
   const [totalIncome, setTotalIncome] = useState(0);
 
   const fetchChartData = async () => {
-    fetch("http://localhost:8080/api/payments/paymentSummary")
+    fetch("http://localhost:33000/api/payments/paymentSummary")
     .then((response) => response.json())
     .then((data) => {
       const formattedData = data.map((item) => ({
@@ -34,7 +34,7 @@ const Dashboard = () => {
 
   const fetchTotalIncome = async () => {
     try {
-      const response = await fetch('http://localhost:8080/api/payments/total');
+      const response = await fetch('http://localhost:33000/api/payments/total');
       const data = await response.json();
       setTotalIncome(data || 0);
 
@@ -45,7 +45,7 @@ const Dashboard = () => {
 
   const fetchFirstFiveCustomers = async () => {
     try {
-      const response = await fetch('http://localhost:8080/api/customers/first-five');
+      const response = await fetch('http://localhost:33000/api/customers/first-five');
       const data = await response.json();
       setRecentCustomers(data || []);
     } catch (error) {
@@ -77,7 +77,7 @@ const Dashboard = () => {
               </div>
           </div>
         </div>
-        <div className="bg-white p-6 rounded-xl shadow-sm">
+        {/* <div className="bg-white p-6 rounded-xl shadow-sm">
           <div className="flex items-center">
             <div className="p-3 bg-blue-100 rounded-full">
               <TrendingUp className="w-6 h-6 text-blue-600" />
@@ -87,7 +87,7 @@ const Dashboard = () => {
               <p className="text-2xl font-semibold">+8.5%</p>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
 
       

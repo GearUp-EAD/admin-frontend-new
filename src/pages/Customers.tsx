@@ -20,7 +20,7 @@ const Customers = () => {
   useEffect(() => {
     const fetchCustomers = async () => {
       try {
-        const response = await fetch('http://localhost:8080/api/customers');
+        const response = await fetch('http://localhost:33000/api/customers');
         const data = await response.json();
         setCustomers(data);
         console.log("this is image URL", data[0]?.imageUrl);
@@ -60,7 +60,7 @@ const Customers = () => {
 
   const fetchOrderCount = async (customerId: string) => {
     try {
-      const response = await fetch(`http://localhost:8080/api/orders/customer/${customerId}`);
+      const response = await fetch(`http://localhost:33000/api/orders/customer/${customerId}`);
       const data = await response.json();
       return data.length; // Assuming the API returns an array of orders
     } catch (error) {
@@ -71,7 +71,7 @@ const Customers = () => {
 
   const fetchTotalAmount = async (customerId: string) => {
     try {
-      const response = await fetch(`http://localhost:8080/api/orders/totalAmount/${customerId}`);
+      const response = await fetch(`http://localhost:33000/api/orders/totalAmount/${customerId}`);
       const amount = await response.json();
       console.log(amount);
       return amount;

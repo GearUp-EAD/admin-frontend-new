@@ -43,12 +43,12 @@ describe('Customers Component', () => {
 
   beforeEach(() => {
     // Mock API responses
-    cy.intercept('GET', 'http://localhost:8080/api/customers', mockCustomers).as('getCustomers');
-    cy.intercept('GET', 'http://localhost:8080/api/orders/customer/*', (req) => {
+    cy.intercept('GET', 'http://localhost:33000/api/customers', mockCustomers).as('getCustomers');
+    cy.intercept('GET', 'http://localhost:33000/api/orders/customer/*', (req) => {
       const customerId = req.url.split('/').pop();
       return mockOrderCounts[customerId] || 0;
     }).as('getOrderCounts');
-    cy.intercept('GET', 'http://localhost:8080/api/orders/totalAmount/*', (req) => {
+    cy.intercept('GET', 'http://localhost:33000/api/orders/totalAmount/*', (req) => {
       const customerId = req.url.split('/').pop();
       return mockTotalAmounts[customerId] || 0;
     }).as('getTotalAmounts');
@@ -87,7 +87,7 @@ describe('Customers Component', () => {
   });
 
   it('shows loading state', () => {
-    cy.intercept('GET', 'http://localhost:8080/api/customers', (req) => {
+    cy.intercept('GET', 'http://localhost:33000/api/customers', (req) => {
       req.on('response', (res) => {
         res.setDelay(1000); // Delay response
       });
@@ -100,7 +100,7 @@ describe('Customers Component', () => {
   });
 
   it('handles error state', () => {
-    cy.intercept('GET', 'http://localhost:8080/api/customers', {
+    cy.intercept('GET', 'http://localhost:33000/api/customers', {
       statusCode: 500,
       body: { message: 'Internal Server Error' },
     });
@@ -121,9 +121,9 @@ describe('Customers Component', () => {
         address: '123 Elm Street',
       },
     ];
-    cy.intercept('GET', 'http://localhost:8080/api/customers', incompleteCustomers).as('getCustomers');
-    cy.intercept('GET', 'http://localhost:8080/api/orders/customer/*', []).as('getOrderCounts');
-    cy.intercept('GET', 'http://localhost:8080/api/orders/totalAmount/*', 0).as('getTotalAmounts');
+    cy.intercept('GET', 'http://localhost:33000/api/customers', incompleteCustomers).as('getCustomers');
+    cy.intercept('GET', 'http://localhost:33000/api/orders/customer/*', []).as('getOrderCounts');
+    cy.intercept('GET', 'http://localhost:33000/api/orders/totalAmount/*', 0).as('getTotalAmounts');
 
     mountWithRouter();
 

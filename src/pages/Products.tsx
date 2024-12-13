@@ -30,7 +30,7 @@ const Products = () => {
   // Fetch parent categories
   const fetchCategories = async () => {
     try {
-      const response = await fetch("http://localhost:8080/api/categories/parents");
+      const response = await fetch("http://localhost:33000/api/categories/parents");
       const data = await response.json();
       setCategories(data);
     } catch (error) {
@@ -41,7 +41,7 @@ const Products = () => {
   // Fetch subcategories of a parent category
   const fetchSubcategories = async (parentID: string) => {
     try {
-      const response = await fetch(`http://localhost:8080/api/categories/${parentID}/subcategories
+      const response = await fetch(`http://localhost:33000/api/categories/${parentID}/subcategories
 `);
       const data = await response.json();
       setSubcategories(data);
@@ -53,7 +53,7 @@ const Products = () => {
 
   const fetchProducts = async (categoryId: string) => {
     try {
-      const response = await fetch(`http://localhost:8080/api/products?categoryId=${categoryId}`);
+      const response = await fetch(`http://localhost:33000/api/products?categoryId=${categoryId}`);
       const data = await response.json();
       setProducts(data);
       console.log(data);
@@ -99,14 +99,13 @@ const Products = () => {
           ))}
         </div>
       ) : (
-        // Display 
         
         <div>
     {!showProducts ? (
       <div>
         <button
-          className="mb-4 px-4 py-2 bg-blue-500 text-white rounded"
-          onClick={() => setSelectedParentID(null)}
+className="mb-4 px-4 py-2 bg-[#8B4513] text-white rounded"
+onClick={() => setSelectedParentID(null)}
         >
           Back
         </button>
@@ -139,7 +138,7 @@ const Products = () => {
       // Products view
       <div>
         <button
-          className="mb-4 px-4 py-2 bg-blue-500 text-white rounded"
+          className="mb-4 px-4 py-2 bg-[#8B4513] text-white rounded"
           onClick={() => setShowProducts(false)}
         >
           Back
@@ -168,8 +167,6 @@ const Products = () => {
             </div>
           ))}
           </div>
-
-
       </div>
     )}
   </div>

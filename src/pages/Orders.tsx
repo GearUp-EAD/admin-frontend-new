@@ -82,7 +82,7 @@ const Orders = () => {
 
   const fetchShippingDetails = async () => {
     try {
-      const response = await fetch("http://localhost:8080/api/shippings");
+      const response = await fetch("http://localhost:33000/api/shippings");
       if (!response.ok) {
         throw new Error("Failed to fetch shipping details");
       }
@@ -97,7 +97,7 @@ const Orders = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await fetch("http://localhost:8080/api/orders");
+        const response = await fetch("http://localhost:33000/api/orders");
         if (!response.ok) {
           throw new Error("Failed to fetch orders");
         }
@@ -154,7 +154,7 @@ const Orders = () => {
   const fetchCustomerDetails = async (customerId: string) => {
     try {
       const response = await fetch(
-        `http://localhost:8080/api/customers/${customerId}`
+        `http://localhost:33000/api/customers/${customerId}`
       );
       return await response.json();
     } catch (error) {
@@ -166,7 +166,7 @@ const Orders = () => {
   const fetchShippingDetail = async (orderId: string) => {
     try {
       const response = await fetch(
-        `http://localhost:8080/api/shippings/order/${orderId}`
+        `http://localhost:33000/api/shippings/order/${orderId}`
       );
       return await response.json();
     } catch (error) {
@@ -215,7 +215,7 @@ const Orders = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:8080/api/shippings/order/${orderId}`,
+        `http://localhost:33000/api/shippings/order/${orderId}`,
         {
           method: "PUT",
           headers: {
