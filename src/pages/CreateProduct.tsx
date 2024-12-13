@@ -46,7 +46,6 @@ const CreateProduct = () => {
 
   const [uploading, setUploading] = useState(false);
   const [productImage, setProductImage] = useState<string | null>(null);
-  // const sizeOptions = ["XS", "S", "M", "L", "XL", "2XL", "3XL"];
   const [sizeOptions, setSizeOptions] = useState<Sizes[]>([]);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [selectedSizeType, setSelectedSizeType] = useState<string>("");
@@ -97,12 +96,13 @@ const CreateProduct = () => {
     }
   };
 
-  const handleAddSize = () => {
+  const handleAddSize = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault(); // Prevent default behavior (just in case)
     if (newSize.size) {
       setSizes([
         ...sizes,
         {
-          size: newSize.size, // This should be the string value like "Large"
+          size: newSize.size,
           quantity: newSize.quantity,
           priceAdjustment: newSize.priceAdjustment,
         },
@@ -110,6 +110,7 @@ const CreateProduct = () => {
       setNewSize({ size: "", quantity: 0, priceAdjustment: 0 });
     }
   };
+  
 
   const handleRemoveSize = (index: number) => {
     setSizes(sizes.filter((_, i) => i !== index));
@@ -490,6 +491,7 @@ const CreateProduct = () => {
               }
             />
             <button
+              type="button" 
               onClick={handleAddSize}
               className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
             >
