@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Bell, Search, Plus, Menu, LogOut, Settings, HelpCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { logout } from '../context/ProtectedRoutes';
 
 const notifications = [
   {
@@ -23,7 +24,7 @@ const notifications = [
     message: 'Payment received for Order #1232',
     time: '3 hours ago',
     unread: false,
-  }
+  },
 ];
 
 const Header = ({ toggleMobileSidebar }) => {
@@ -31,10 +32,13 @@ const Header = ({ toggleMobileSidebar }) => {
   const [showNotifications, setShowNotifications] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
 
-  const handleLogout = () => {
-    // Add logout logic here
-    navigate('/login');
-  };
+  const handleLogout = useCallback(() => {
+    const confirmed = window.confirm('Are you sure you want to logout?');
+    if (confirmed) {
+      logout();
+      navigate('/login'); // Redirect to the login page after logout
+    }
+  }, [navigate]);
 
   return (
     <header className="bg-white border-b border-gray-200 px-4 py-4 sticky top-0 z-20">
@@ -57,7 +61,7 @@ const Header = ({ toggleMobileSidebar }) => {
         </div>
 
         <div className="flex items-center space-x-4">
-          <button 
+          <button
             onClick={() => navigate('/products/create')}
             className="flex items-center px-4 py-2 bg-[#543310] text-white rounded-lg hover:bg-[#A0522D] transition-colors"
           >
@@ -67,7 +71,7 @@ const Header = ({ toggleMobileSidebar }) => {
 
           {/* Notifications */}
           <div className="relative">
-            <button 
+            <button
               className="p-2 hover:bg-gray-100 rounded-full relative"
               onClick={() => setShowNotifications(!showNotifications)}
             >
@@ -107,7 +111,7 @@ const Header = ({ toggleMobileSidebar }) => {
 
           {/* Profile Dropdown */}
           <div className="relative">
-            <button 
+            <button
               onClick={() => setShowProfile(!showProfile)}
               className="flex items-center space-x-2"
             >
@@ -116,7 +120,6 @@ const Header = ({ toggleMobileSidebar }) => {
                 alt="Admin"
                 className="w-8 h-8 rounded-full"
               />
-              <span className="hidden md:inline text-sm font-medium">Admin</span>
             </button>
 
             {showProfile && (
@@ -125,21 +128,21 @@ const Header = ({ toggleMobileSidebar }) => {
                   <p className="text-sm font-medium">EliteGear Admin</p>
                   <p className="text-xs text-gray-500">admin@elitegear.com</p>
                 </div>
-                <button 
+                <button
                   onClick={() => navigate('/profile')}
                   className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 w-full text-left flex items-center"
                 >
                   <Settings className="w-4 h-4 mr-2" />
                   Settings
                 </button>
-                <button 
+                <button
                   onClick={() => navigate('/help')}
                   className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 w-full text-left flex items-center"
                 >
                   <HelpCircle className="w-4 h-4 mr-2" />
                   Help Center
                 </button>
-                <button 
+                <button
                   onClick={handleLogout}
                   className="px-4 py-2 text-sm text-red-600 hover:bg-gray-50 w-full text-left flex items-center"
                 >

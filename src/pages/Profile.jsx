@@ -3,6 +3,7 @@ import { Camera, Save } from 'lucide-react';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { storage } from '../firebase.js'; // Import the Firebase storage instance
 
+
 const Profile = () => {
   const [formData, setFormData] = useState({
     firstName: 'John',
